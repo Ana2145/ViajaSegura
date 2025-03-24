@@ -10,11 +10,11 @@ class TravelInputsSection extends StatelessWidget {
       children: const [
         TravelInput(
           label: 'Inicio de viaje',
-          iconColor: Color(0xAABC9B73),
+          iconColor: Color(0xFFBC9B73),
         ),
         TravelInput(
           label: 'Fin de viaje',
-          iconColor: Color(0xAA773357),
+          iconColor: Color(0xFF773357),
         ),
       ],
     );
