@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../widgets/molecules/welcome_logo.dart';
+import 'package:viaja_segura_movil/presentation/widgets/templates/splash_template.dart';
+import '../widgets/atoms/logo.dart';
 import '../widgets/atoms/custom_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -7,31 +8,29 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF602343),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return SplashTemplate(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            'assets/images/vector_up.png',
-            width: double.infinity,
-          ),
-          WelcomeLogo(),
-          Column(
-            children: [
-              CustomButton(
-                  text: 'Registrarse', onPressed: () => print('Registrarse')),
-              TextButton(
-                onPressed: () => print('Crear una cuenta'),
-                child: Text('Crear una cuenta',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    )),
-              ),
-            ],
-          ),
-          Image.asset('assets/images/vector_down.png', width: double.infinity),
+          const Logo(),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 64.0),
+            child: Column(
+              children: [
+                CustomButton(
+                    text: 'Registrarse', onPressed: () => print('Registrarse')),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () => print('Crear una cuenta'),
+                  child: const Text(
+                    'Crear una cuenta',
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

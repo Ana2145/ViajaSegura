@@ -19,12 +19,12 @@ class PanicScreen extends StatelessWidget {
             ],
           ),
         ),
-        child: Stack(
+        child: const Stack(
           children: [
             Center(
               child: PanicButton(),
             ),
-            const Positioned(
+            Positioned(
               bottom: 80,
               left: 20,
               right: 20,

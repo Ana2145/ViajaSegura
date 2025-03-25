@@ -59,7 +59,7 @@ class DriverCard extends StatelessWidget {
                       IconText(
                         icon: Icons.person,
                         text: "$passengers",
-                        iconColor: Color(0xFF7C4A36),
+                        iconColor: const Color(0xFF7C4A36),
                       ),
                     ],
                   ),
@@ -74,9 +74,9 @@ class DriverCard extends StatelessWidget {
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Placas",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 10,
                               color: Colors.grey,
                             ),
@@ -94,10 +94,10 @@ class DriverCard extends StatelessWidget {
                         onPressed: onMoreInfo,
                         style: TextButton.styleFrom(
                           foregroundColor: const Color(0xFF7C4A36),
-                          backgroundColor: Color(0xFFE2D5CA),
-                          minimumSize: Size(0, 0),
+                          backgroundColor: const Color(0xFFE2D5CA),
+                          minimumSize: const Size(0, 0),
                           padding:
-                              EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                              const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
                         ),
                         child: const Text("Más info",
                             style: TextStyle(

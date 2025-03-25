@@ -48,7 +48,7 @@ class DriverListScreen extends StatelessWidget {
                 width: 100,
                 height: 7,
                 decoration: BoxDecoration(
-                  color: Color(0xFFE2D5CA),
+                  color: const Color(0xFFE2D5CA),
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),

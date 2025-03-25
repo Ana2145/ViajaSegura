@@ -35,11 +35,11 @@ class _MainScreenState extends State<MainScreen> {
             'assets/images/map_background.png',
             fit: BoxFit.cover,
           )),
-          Column(
+          const Column(
             children: [
-              const TopBar(),
-              const SizedBox(height: 20),
-              const TravelInputsSection(),
+              TopBar(),
+              SizedBox(height: 20),
+              TravelInputsSection(),
             ],
           ),
           const Positioned(

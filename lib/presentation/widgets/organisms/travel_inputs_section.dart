@@ -6,8 +6,8 @@ class TravelInputsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         TravelInput(
           label: 'Inicio de viaje',
           iconColor: Color(0xFFBC9B73),

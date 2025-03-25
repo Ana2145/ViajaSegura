@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'presentation/screens/panic_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:viaja_segura_movil/core/constants/app_colors.dart';
+import 'package:viaja_segura_movil/presentation/screens/splash_screen.dart';
+import 'package:viaja_segura_movil/presentation/screens/welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,10 +17,39 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Viaja Segura',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        textTheme: GoogleFonts.manropeTextTheme(),
+        primaryColor: AppColors.primaryColor,
         useMaterial3: true,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.buttonColor,
+            foregroundColor: AppColors.backgroundColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            elevation: 0,
+            textStyle: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.backgroundColor,
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
-      home: const PanicScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashScreen(),
+        '/welcome_screen': (context) => const WelcomeScreen(),
+      },
     );
   }
 }
