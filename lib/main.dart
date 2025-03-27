@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:viaja_segura_movil/core/constants/app_colors.dart';
 import 'package:viaja_segura_movil/presentation/screens/login_screen.dart';
+import 'package:viaja_segura_movil/presentation/screens/main_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/splash_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/welcome_screen.dart';
 
@@ -116,6 +117,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/welcome_screen': (context) => const WelcomeScreen(),
         '/login_screen': (context) => const LoginScreen(),
+        '/main_screen': (context) => const MainScreen(),
       },
     );
   }

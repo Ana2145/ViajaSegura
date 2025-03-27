@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 
-class TopBar extends StatelessWidget {
+class TopBar extends StatelessWidget implements PreferredSizeWidget {
   const TopBar({super.key});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(60);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 0, top: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+      padding: const EdgeInsets.all(8.0),
+      child: AppBar(
+        backgroundColor: Colors.transparent,
+        actions: [
           IconButton(
-            onPressed: () => print('Abrir menú'),
+            onPressed: () => {},
             icon: const Icon(
               Icons.menu,
               size: 30,
               color: Color(0xFF773357),
             ),
           ),
+          const Spacer(),
           const CircleAvatar(
             radius: 20,
             backgroundColor: Colors.transparent,

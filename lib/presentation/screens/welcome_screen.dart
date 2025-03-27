@@ -26,7 +26,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Column(
               children: [
                 CustomButton(
-                  onPressed: () => _navigateTo('/login_screen'),
+                  onPressed: () => _navigateTo('/main_screen'),
                   text: 'Iniciar sesión',
                 ),
                 const SizedBox(height: 16),

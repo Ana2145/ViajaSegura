@@ -83,7 +83,8 @@ class _LoginFormState extends State<LoginForm> {
       //final email = _emailController.text;
       //final password = _passwordController.text;
 
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/main_screen', (route) => false);
     }
   }
 }
