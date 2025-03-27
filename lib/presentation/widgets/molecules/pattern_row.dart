@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PatternRow extends StatelessWidget {
+  final Color color;
   final bool isReversed;
+  final int height;
 
   const PatternRow({
     super.key,
+    required this.color,
+    this.height = 6,
     this.isReversed = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final patternHeight = MediaQuery.of(context).size.height / 6;
+    final patternHeight = MediaQuery.of(context).size.height / height;
     final patternWidth = patternHeight * 2.67;
 
     final patternCount = ((screenWidth / patternWidth).floor() + 2 | 1);
@@ -20,22 +24,25 @@ class PatternRow extends StatelessWidget {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      physics: const NeverScrollableScrollPhysics(),
       child: Transform.translate(
         offset: Offset(offset, 0),
         child: Row(
           children: List.generate(
-              patternCount,
-              (_) => Opacity(
-                    opacity: 0.15,
-                    child: Transform.rotate(
-                      angle: isReversed ? 3.14159 : 0,
-                      child: SvgPicture.asset(
-                        'assets/images/pattern.svg',
-                        height: patternHeight,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  )),
+            patternCount,
+            (_) => Opacity(
+              opacity: 0.15,
+              child: Transform.rotate(
+                angle: isReversed ? 3.14159 : 0,
+                child: SvgPicture.asset(
+                  'assets/images/pattern.svg',
+                  colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                  height: patternHeight,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

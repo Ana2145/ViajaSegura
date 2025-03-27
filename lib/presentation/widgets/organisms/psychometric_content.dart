@@ -6,7 +6,7 @@ class PsychometricContent extends StatefulWidget {
   const PsychometricContent({super.key});
 
   @override
-  _PsychometricContentState createState() => _PsychometricContentState();
+  State<PsychometricContent> createState() => _PsychometricContentState();
 }
 
 class _PsychometricContentState extends State<PsychometricContent> {

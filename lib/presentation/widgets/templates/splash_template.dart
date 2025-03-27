@@ -8,16 +8,18 @@ class SplashTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final Color canvasColor = theme.canvasColor;
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: theme.primaryColor,
       body: SafeArea(
         child: Column(
           children: [
-            const PatternRow(),
+            PatternRow(color: canvasColor),
             const SizedBox(height: 64),
             Expanded(child: child),
             const SizedBox(height: 64),
-            const PatternRow(isReversed: true),
+            PatternRow(color: canvasColor, isReversed: true),
           ],
         ),
       ),

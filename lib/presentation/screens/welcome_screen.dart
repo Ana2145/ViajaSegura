@@ -3,11 +3,17 @@ import 'package:viaja_segura_movil/presentation/widgets/templates/splash_templat
 import '../widgets/atoms/logo.dart';
 import '../widgets/atoms/custom_button.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
   @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SplashTemplate(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -20,12 +26,18 @@ class WelcomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 CustomButton(
-                    text: 'Registrarse', onPressed: () => print('Registrarse')),
+                  onPressed: () => _navigateTo('/login_screen'),
+                  text: 'Iniciar sesión',
+                ),
                 const SizedBox(height: 16),
                 TextButton(
-                  onPressed: () => print('Crear una cuenta'),
-                  child: const Text(
+                  onPressed: () => _navigateTo('/register_screen'),
+                  child: Text(
                     'Crear una cuenta',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.canvasColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -34,5 +46,9 @@ class WelcomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _navigateTo(String route) {
+    Navigator.of(context).pushNamed(route);
   }
 }
