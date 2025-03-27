@@ -1,10 +1,11 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:viaja_segura_movil/presentation/widgets/molecules/top_bar.dart';
 
@@ -17,21 +18,20 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final MapController mapController = MapController();
-  final GeolocatorPlatform _geolocator = GeolocatorPlatform.instance;
+  final Location _location = Location();
   final TextEditingController _searchController = TextEditingController();
-
   bool isLoading = true;
   LatLng? _currentLocation;
   LatLng? _destinationLocation;
   List<LatLng> _route = [];
 
   @override
+  @override
   void initState() {
     super.initState();
     _initializeLocation();
   }
 
-  /// Obtiene las coordenadas de un punto a partir de una búsqueda en texto
   Future<void> fetchCoordinatesPoint(String location) async {
     final url = Uri.parse(
         'https://nominatim.openstreetmap.org/search?q=$location&format=json&limit=1');
@@ -43,8 +43,6 @@ class _MainScreenState extends State<MainScreen> {
         final lat = double.parse(data[0]['lat']);
         final lon = double.parse(data[0]['lon']);
         setState(() => _destinationLocation = LatLng(lat, lon));
-
-        mapController.move(_destinationLocation!, 16); // Centrar en destino
         await fetchRoute();
       } else {
         errorMessage('No se ha encontrado la ubicación');
@@ -54,15 +52,12 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  /// Obtiene la ruta entre la ubicación actual y el destino
   Future<void> fetchRoute() async {
     if (_currentLocation == null || _destinationLocation == null) return;
-
-    final url = Uri.parse(
-        "https://router.project-osrm.org/route/v1/driving/"
-            "${_currentLocation!.longitude},${_currentLocation!.latitude};"
-            "${_destinationLocation!.longitude},${_destinationLocation!.latitude}?overview=full&geometries=polyline");
-
+    final url = Uri.parse("https://router.project-osrm.org/route/v1/driving/"
+        "${_currentLocation!.longitude},${_currentLocation!.latitude};"
+        "${_destinationLocation!.longitude},${_destinationLocation!.latitude}"
+        "?overview=full&geometries=polyline");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -74,10 +69,10 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  /// Decodifica la polilínea de OpenStreetMap y la convierte en lista de coordenadas
   void _decodePolyline(String encodePolyline) {
     PolylinePoints polylinePoints = PolylinePoints();
-    List<PointLatLng> decodedPoints = polylinePoints.decodePolyline(encodePolyline);
+    List<PointLatLng> decodedPoints =
+    polylinePoints.decodePolyline(encodePolyline);
 
     setState(() {
       _route = decodedPoints
@@ -86,57 +81,50 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  /// Muestra un mensaje de error en un SnackBar
   void errorMessage(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
   Future<void> _initializeLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+    if (!await _checkTheRequestPermissions()) return;
 
-    // Verificar si el servicio de ubicación está habilitado
-    serviceEnabled = await _geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      errorMessage('El servicio de ubicación no está habilitado.');
-      return;
-    }
-
-    // Verificar si se tienen permisos de ubicación
-    permission = await _geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await _geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
-        errorMessage('Permiso de ubicación denegado.');
-        return;
-      }
-    }
-
-    try {
-      // Obtener la ubicación actual
-      Position position = await _geolocator.getCurrentPosition();
-      setState(() {
-        _currentLocation = LatLng(position.latitude, position.longitude);
-        isLoading = false;
-      });
-
-      // Escuchar cambios en la ubicación del usuario
-      _geolocator.getPositionStream().listen((Position position) {
+    _location.onLocationChanged.listen((LocationData locationData) {
+      if (locationData.latitude != null && locationData.longitude != null) {
         setState(() {
-          _currentLocation = LatLng(position.latitude, position.longitude);
+          _currentLocation = LatLng(
+            locationData.latitude!,
+            locationData.longitude!,
+          );
+          isLoading = false;
         });
-      });
-    } catch (e) {
-      errorMessage("Error al obtener la ubicación: $e");
-    }
+      }
+    });
   }
 
-  /// Centra el mapa en la ubicación actual del usuario
+  Future<bool> _checkTheRequestPermissions() async {
+    bool serviceEnabled = await _location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await _location.requestService();
+      if (!serviceEnabled) return false;
+    }
+
+    PermissionStatus permissionGranted = await _location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await _location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) return false;
+    }
+    return true;
+  }
+
   Future<void> _userLocation() async {
     if (_currentLocation != null) {
       mapController.move(_currentLocation!, 16);
     } else {
-      errorMessage('No se ha podido obtener tu ubicación');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No se ha podido obtener tu ubicación'),
+        ),
+      );
     }
   }
 
@@ -168,33 +156,8 @@ class _MainScreenState extends State<MainScreen> {
                   markerDirection: MarkerDirection.heading,
                 ),
               ),
-              if (_route.isNotEmpty)
-                PolylineLayer(
-                  polylines: [
-                    Polyline(
-                      points: _route,
-                      color: Colors.blue,
-                      strokeWidth: 5.0,
-                    ),
-                  ],
-                ),
-              if (_destinationLocation != null)
-                MarkerLayer(
-                  markers: [
-                    Marker(
-                      point: _destinationLocation!,
-                      width: 40,
-                      height: 40,
-                      child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
-                    ),
-                  ],
-                ),
             ],
           ),
-          if (isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
