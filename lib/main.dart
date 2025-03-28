@@ -51,7 +51,11 @@ class MyApp extends StatelessWidget {
         ),
         primaryColor: AppColors.primaryColor,
         canvasColor: AppColors.backgroundColor,
+        secondaryHeaderColor: AppColors.accentColor,
+        focusColor: AppColors.contentColor,
         colorScheme: const ColorScheme.light(
+          primary: AppColors.primaryColor,
+          secondary: AppColors.secondaryColor,
           surface: AppColors.backgroundColor,
         ),
         useMaterial3: true,
@@ -82,6 +86,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(
+          prefixIconColor: AppColors.contentColor,
           suffixIconColor: AppColors.contentColor,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -111,6 +116,7 @@ class MyApp extends StatelessWidget {
             iconSize: WidgetStateProperty.all(32),
           )
         ),
+
       ),
       initialRoute: '/',
       routes: {

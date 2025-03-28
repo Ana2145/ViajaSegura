@@ -13,13 +13,13 @@ class DriverListScreen extends StatelessWidget {
 
     List<Map<String, dynamic>> drivers = [
       {
-        "carImage": "assets/images/car1.png",
+        "carImage": "assets/images/car.png",
         "carName": "Toyota Corolla",
         "plateNumber": "ABC-123",
         "passengers": 4
       },
       {
-        "carImage": "assets/images/car2.png",
+        "carImage": "assets/images/car.png",
         "carName": "Honda Civic",
         "plateNumber": "XYZ-789",
         "passengers": 3

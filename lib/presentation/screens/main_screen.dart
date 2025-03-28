@@ -1,13 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
-import 'package:http/http.dart' as http;
+import 'package:viaja_segura_movil/core/services/map_location_services.dart';
+import 'package:viaja_segura_movil/presentation/screens/trip_selection_screen.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/top_bar.dart';
+import 'package:viaja_segura_movil/presentation/widgets/organisms/map_bottom_panel.dart';
+import 'package:viaja_segura_movil/presentation/widgets/organisms/map_view.dart';
+import 'package:viaja_segura_movil/presentation/widgets/organisms/map_search_button.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,115 +17,70 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final MapController mapController = MapController();
-  final Location _location = Location();
-  final TextEditingController _searchController = TextEditingController();
-  bool isLoading = true;
-  LatLng? _currentLocation;
-  LatLng? _destinationLocation;
-  List<LatLng> _route = [];
+  final MapController _mapController = MapController();
+  final MapLocationServices _locationService = MapLocationServices();
+  LatLng? _currentPosition;
+  String? _currentAddress;
+  bool _isLoading = true;
 
-  @override
   @override
   void initState() {
     super.initState();
-    _initializeLocation();
+    _initLocationService();
   }
 
-  Future<void> fetchCoordinatesPoint(String location) async {
-    final url = Uri.parse(
-        'https://nominatim.openstreetmap.org/search?q=$location&format=json&limit=1');
-    final response = await http.get(url);
+  Future<void> _initLocationService() async {
+    final serviceEnabled = await _locationService.checkAndRequestService();
+    if (!serviceEnabled) {
+      setState(() => _isLoading = false);
+      return;
+    }
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      if (data.isNotEmpty) {
-        final lat = double.parse(data[0]['lat']);
-        final lon = double.parse(data[0]['lon']);
-        setState(() => _destinationLocation = LatLng(lat, lon));
-        await fetchRoute();
-      } else {
-        errorMessage('No se ha encontrado la ubicación');
-      }
+    final permissionGranted =
+        await _locationService.checkAndRequestPermission();
+    if (!permissionGranted) {
+      setState(() => _isLoading = false);
+      return;
+    }
+
+    await _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    final locationData = await _locationService.getCurrentLocation();
+    if (locationData != null &&
+        locationData.latitude != null &&
+        locationData.longitude != null) {
+      await _updatePosition(locationData);
     } else {
-      errorMessage('Error al obtener la ubicación');
+      setState(() => _isLoading = false);
     }
   }
 
-  Future<void> fetchRoute() async {
-    if (_currentLocation == null || _destinationLocation == null) return;
-    final url = Uri.parse("https://router.project-osrm.org/route/v1/driving/"
-        "${_currentLocation!.longitude},${_currentLocation!.latitude};"
-        "${_destinationLocation!.longitude},${_destinationLocation!.latitude}"
-        "?overview=full&geometries=polyline");
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final geometry = data['routes'][0]['geometry'];
-      _decodePolyline(geometry);
-    } else {
-      errorMessage('Error al obtener la ruta');
-    }
-  }
-
-  void _decodePolyline(String encodePolyline) {
-    PolylinePoints polylinePoints = PolylinePoints();
-    List<PointLatLng> decodedPoints =
-    polylinePoints.decodePolyline(encodePolyline);
+  Future<void> _updatePosition(LocationData locationData) async {
+    final newPosition = LatLng(locationData.latitude!, locationData.longitude!);
+    final address = await _locationService.getAddressFromLatLng(
+        newPosition.latitude, newPosition.longitude);
 
     setState(() {
-      _route = decodedPoints
-          .map((point) => LatLng(point.latitude, point.longitude))
-          .toList();
+      _currentPosition = newPosition;
+      _currentAddress = address;
+      _isLoading = false;
     });
   }
 
-  void errorMessage(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-  }
+  void _navigateToTripSelection(BuildContext context) {
+    if (_currentAddress == null) return;
 
-  Future<void> _initializeLocation() async {
-    if (!await _checkTheRequestPermissions()) return;
-
-    _location.onLocationChanged.listen((LocationData locationData) {
-      if (locationData.latitude != null && locationData.longitude != null) {
-        setState(() {
-          _currentLocation = LatLng(
-            locationData.latitude!,
-            locationData.longitude!,
-          );
-          isLoading = false;
-        });
-      }
-    });
-  }
-
-  Future<bool> _checkTheRequestPermissions() async {
-    bool serviceEnabled = await _location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await _location.requestService();
-      if (!serviceEnabled) return false;
-    }
-
-    PermissionStatus permissionGranted = await _location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await _location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) return false;
-    }
-    return true;
-  }
-
-  Future<void> _userLocation() async {
-    if (_currentLocation != null) {
-      mapController.move(_currentLocation!, 16);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No se ha podido obtener tu ubicación'),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TripSelectionScreen(
+          initialAddress: _currentAddress!,
+          initialPosition: _currentPosition,
         ),
-      );
-    }
+      ),
+    );
   }
 
   @override
@@ -135,37 +90,25 @@ class _MainScreenState extends State<MainScreen> {
       appBar: const TopBar(),
       body: Stack(
         children: [
-          FlutterMap(
-            mapController: mapController,
-            options: const MapOptions(
-              initialCenter: LatLng(18.921361917967296, -99.23316953776555),
-              initialZoom: 16,
-              minZoom: 0,
-              maxZoom: 100,
+          if (_isLoading)
+            const Center(child: CircularProgressIndicator())
+          else
+            MapView(
+              mapController: _mapController,
+              currentPosition: _currentPosition,
             ),
-            children: [
-              TileLayer(
-                urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-              ),
-              CurrentLocationLayer(
-                style: const LocationMarkerStyle(
-                  marker: DefaultLocationMarker(
-                    child: Icon(Icons.location_on_outlined),
+          if (!_isLoading)
+            MapBottomPanel(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MapSearchButton(
+                    onPressed: () => _navigateToTripSelection(context),
                   ),
-                  markerSize: Size(50, 50),
-                  markerDirection: MarkerDirection.heading,
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        elevation: 0,
-        onPressed: _userLocation,
-        backgroundColor: Theme.of(context).canvasColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(64)),
-        child: Icon(Icons.my_location, color: Theme.of(context).primaryColor),
       ),
     );
   }
