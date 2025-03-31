@@ -60,7 +60,6 @@ class _MapViewState extends State<MapView> {
     );
   }
 
-
   void _onMapReady() {
     if (widget.currentPosition != null) {
       _internalMapController.move(widget.currentPosition!, 16);
@@ -86,11 +85,7 @@ class _MapViewState extends State<MapView> {
     final theme = Theme.of(context);
     return PolylineLayer(
       polylines: [
-        Polyline(
-          points: widget.route,
-          strokeWidth: 6,
-          color: theme.focusColor,
-        ),
+        Polyline(points: widget.route, strokeWidth: 6, color: theme.focusColor),
       ],
     );
   }
@@ -103,11 +98,8 @@ class _MapViewState extends State<MapView> {
           point: widget.startLocation!,
           width: 40,
           height: 40,
-          child: Icon(
-            Icons.radio_button_checked,
-            color: theme.secondaryHeaderColor,
-            size: 24,
-          ),
+          child: Icon(Icons.radio_button_checked,
+              color: theme.secondaryHeaderColor, size: 24),
         ),
       ],
     );
@@ -119,11 +111,7 @@ class _MapViewState extends State<MapView> {
       markers: [
         Marker(
           point: widget.destinationLocation!,
-          child: Icon(
-            Icons.location_on,
-            color: theme.primaryColor,
-            size: 32,
-          ),
+          child: Icon(Icons.location_on, color: theme.primaryColor, size: 32),
         ),
       ],
     );

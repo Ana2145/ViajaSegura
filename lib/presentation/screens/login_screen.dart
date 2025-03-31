@@ -9,7 +9,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const AuthTemplate(
       title: 'Iniciar Sesión',
-      form: LoginForm(),
+      child: LoginForm(),
     );
   }
 }
