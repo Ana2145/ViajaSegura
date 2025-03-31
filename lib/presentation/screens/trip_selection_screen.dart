@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:viaja_segura_movil/presentation/widgets/atoms/custom_button.dart';
 import 'dart:convert';
 import 'dart:async';
-import 'package:viaja_segura_movil/presentation/widgets/molecules/location_text_field.dart';
+import 'package:viaja_segura_movil/presentation/widgets/organisms/location_text_field.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/swap_locations_button.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/suggestions_list.dart';
 
