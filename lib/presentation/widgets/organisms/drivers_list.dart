@@ -14,27 +14,32 @@ class _DriversListState extends State<DriversList> {
     {
       "carName": "Toyota Corolla",
       "plateNumber": "ABC-123",
-      "passengers": 4
+      "passengers": 4,
+      "color": "#FF0000",
     },
     {
       "carName": "Honda Civic",
       "plateNumber": "XYZ-789",
-      "passengers": 3
+      "passengers": 3,
+      "color": "#00FF00",
     },
     {
       "carName": "Honda Civic",
       "plateNumber": "XYZ-789",
-      "passengers": 3
+      "passengers": 3,
+      "color": "#0000FF",
     },
     {
       "carName": "Honda Civic",
       "plateNumber": "XYZ-789",
-      "passengers": 3
+      "passengers": 3,
+      "color": "#FFFF00",
     },
     {
       "carName": "Honda Civic",
       "plateNumber": "XYZ-789",
-      "passengers": 3
+      "passengers": 3,
+      "color": "#00FFFF",
     },
   ];
 
@@ -46,11 +51,10 @@ class _DriversListState extends State<DriversList> {
           children: [
             for (final driver in drivers)
               DriverCard(
-                carName: driver['carName'],
-                plateNumber: driver['plateNumber'],
-                passengers: driver['passengers'],
-                onTap: () {},
-                onMoreInfo: () {},
+                carName: driver["carName"],
+                plateNumber: driver["plateNumber"],
+                passengers: driver["passengers"],
+                color: driver["color"],
               ),
           ],
         ),
