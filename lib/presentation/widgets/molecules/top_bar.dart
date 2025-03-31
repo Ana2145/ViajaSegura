@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../screens/driver_info_screen.dart';
+import 'package:viaja_segura_movil/presentation/screens/driver_datails_screen.dart';
 
 class TopBar extends StatelessWidget {
   const TopBar({super.key});
@@ -22,7 +22,8 @@ class TopBar extends StatelessWidget {
           GestureDetector(
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const DriverInfoScreen()),
+              MaterialPageRoute(
+                  builder: (context) => const DriverDetailsScreen()),
             ),
             child: const CircleAvatar(
               radius: 20,
