@@ -9,4 +9,6 @@ class AppColors {
 
   static const Color errorColor = Color(0xFF7C4A36);
   static const Color successColor = Color(0xFF7C4A36);
+
+  static const Color lightBrown = Color(0xFFEDE8E4);
 }

@@ -24,23 +24,28 @@ class _AuthTemplateState extends State<AuthTemplate> {
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const GoBackButton(),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 5),
+                      if (widget.title.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: Column(
+                            children: [
+                              Text(widget.title,
+                                  style: theme.textTheme.headlineLarge),
+                              const SizedBox(height: 64),
+                              widget.form,
+                            ],
+                          ),
+                        ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: Column(
-                          children: [
-                            Text(widget.title,
-                                style: theme.textTheme.headlineLarge),
-                            const SizedBox(height: 64),
-                            widget.form,
-                          ],
-                        ),
-                      ),
+                        child: widget.form,
+                      )
                     ],
                   ),
                 ),
