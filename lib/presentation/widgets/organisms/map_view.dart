@@ -52,13 +52,14 @@ class _MapViewState extends State<MapView> {
       ),
       children: [
         _buildTileLayer(),
-        _buildCurrentLocationLayer(),
+        if (widget.startLocation == null) _buildCurrentLocationLayer(),
         if (widget.route.isNotEmpty) _buildRouteLayer(),
         if (widget.startLocation != null) _buildStartMarker(),
         if (widget.destinationLocation != null) _buildDestinationMarker(),
       ],
     );
   }
+
 
   void _onMapReady() {
     if (widget.currentPosition != null) {
@@ -75,7 +76,7 @@ class _MapViewState extends State<MapView> {
   CurrentLocationLayer _buildCurrentLocationLayer() {
     return CurrentLocationLayer(
       style: const LocationMarkerStyle(
-        markerSize: Size(50, 50),
+        markerSize: Size(32, 32),
         markerDirection: MarkerDirection.heading,
       ),
     );

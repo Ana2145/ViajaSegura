@@ -4,10 +4,11 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:viaja_segura_movil/core/services/map_location_services.dart';
 import 'package:viaja_segura_movil/presentation/screens/trip_selection_screen.dart';
+import 'package:viaja_segura_movil/presentation/widgets/atoms/location_fab.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/top_bar.dart';
-import 'package:viaja_segura_movil/presentation/widgets/organisms/map_bottom_panel.dart';
+import 'package:viaja_segura_movil/presentation/widgets/templates/map_bottom_panel.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/map_view.dart';
-import 'package:viaja_segura_movil/presentation/widgets/organisms/map_search_button.dart';
+import 'package:viaja_segura_movil/presentation/widgets/organisms/text_field_button.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -83,6 +84,12 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  void _resetMap() {
+    if (_currentPosition != null) {
+      _mapController.move(_currentPosition!, 16);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,17 +104,29 @@ class _MainScreenState extends State<MainScreen> {
               mapController: _mapController,
               currentPosition: _currentPosition,
             ),
-          if (!_isLoading)
-            MapBottomPanel(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MapSearchButton(
-                    onPressed: () => _navigateToTripSelection(context),
-                  ),
-                ],
+          if (!_isLoading) ...[
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: MapBottomPanel(
+                child: Column(
+                  children: [
+                    TextFieldButton(
+                      icon: Icons.search,
+                      text: '¿A dónde quieres ir?',
+                      onPressed: () => _navigateToTripSelection(context),
+                    ),
+                  ],
+                ),
               ),
             ),
+            Positioned(
+              bottom: 144,
+              right: 16,
+              child: LocationFab(onPressed: _resetMap),
+            ),
+          ]
         ],
       ),
     );

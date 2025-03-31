@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
-class MapSearchButton extends StatelessWidget {
+class TextFieldButton extends StatelessWidget {
+  final IconData icon;
+  final String text;
   final VoidCallback onPressed;
 
-  const MapSearchButton({
+  const TextFieldButton({
     super.key,
+    required this.icon,
+    required this.text,
     required this.onPressed,
   });
 
@@ -21,13 +25,16 @@ class MapSearchButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           color: theme.canvasColor,
         ),
-        child: const Row(
+        child: Row(
           children: [
-            Icon(Icons.search),
-            SizedBox(width: 8),
-            Text(
-              '¿A dónde quieres ir?',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Icon(icon, color: theme.primaryColor),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                text,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),

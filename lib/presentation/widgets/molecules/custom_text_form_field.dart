@@ -6,8 +6,6 @@ class CustomTextFormField extends StatefulWidget {
   final String label;
   final bool readOnly;
   final FormFieldValidator<String> validator;
-  final Widget prefix;
-  final Widget suffix;
 
   const CustomTextFormField({
     super.key,
@@ -16,8 +14,6 @@ class CustomTextFormField extends StatefulWidget {
     required this.label,
     this.readOnly = false,
     this.validator = _defaultValidator,
-    this.prefix = const SizedBox(),
-    this.suffix = const SizedBox(),
   });
 
   @override
@@ -50,11 +46,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           keyboardType: widget.keyboardType,
           readOnly: widget.readOnly,
           validator: widget.validator,
-          decoration: InputDecoration(
-            hintText: widget.label,
-            prefixIcon: widget.prefix,
-            suffixIcon: widget.suffix,
-          ),
         ),
       ],
     );

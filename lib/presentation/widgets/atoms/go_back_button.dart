@@ -10,13 +10,8 @@ class GoBackButton extends StatefulWidget {
 class _GoBackButtonState extends State<GoBackButton> {
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: _goBack,
-      icon: const Icon(Icons.chevron_left),
-    );
+    return IconButton(onPressed: _goBack, icon: const Icon(Icons.chevron_left));
   }
 
-  void _goBack() {
-    Navigator.of(context).pop();
-  }
+  _goBack() => Navigator.of(context).pop();
 }

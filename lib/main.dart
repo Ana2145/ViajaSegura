@@ -51,12 +51,14 @@ class MyApp extends StatelessWidget {
         ),
         primaryColor: AppColors.primaryColor,
         canvasColor: AppColors.backgroundColor,
-        secondaryHeaderColor: AppColors.accentColor,
+        secondaryHeaderColor: AppColors.secondaryColor,
         focusColor: AppColors.contentColor,
+        cardColor: AppColors.whiteColor,
         colorScheme: const ColorScheme.light(
           primary: AppColors.primaryColor,
           secondary: AppColors.secondaryColor,
           surface: AppColors.backgroundColor,
+          tertiary: AppColors.detailColor,
         ),
         useMaterial3: true,
         elevatedButtonTheme: ElevatedButtonThemeData(

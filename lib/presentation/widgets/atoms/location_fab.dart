@@ -10,9 +10,8 @@ class LocationFab extends StatelessWidget {
     return FloatingActionButton(
       elevation: 0,
       onPressed: () => onPressed(),
-      backgroundColor: Theme.of(context).canvasColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(64)),
-      child: Icon(Icons.my_location, color: Theme.of(context).primaryColor),
+      child: const Icon(Icons.my_location),
     );
   }
 }

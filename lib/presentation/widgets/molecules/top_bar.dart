@@ -12,17 +12,16 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.all(8.0),
       child: AppBar(
         backgroundColor: Colors.transparent,
-        actions: [
-          IconButton(
-            onPressed: () => {},
-            icon: const Icon(
-              Icons.menu,
-              size: 30,
-              color: Color(0xFF773357),
-            ),
+        leading: IconButton(
+          onPressed: () => {},
+          icon: const Icon(
+            Icons.menu,
+            size: 30,
+            color: Color(0xFF773357),
           ),
-          const Spacer(),
-          const CircleAvatar(
+        ),
+        actions: const [
+          CircleAvatar(
             radius: 20,
             backgroundColor: Colors.transparent,
             child: Icon(
@@ -30,7 +29,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
               size: 35,
               color: Color(0xFF773357),
             ),
-          ),
+          )
         ],
       ),
     );
