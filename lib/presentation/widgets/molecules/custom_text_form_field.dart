@@ -5,6 +5,8 @@ class CustomTextFormField extends StatefulWidget {
   final TextInputType keyboardType;
   final String label;
   final bool readOnly;
+  final Widget suffix;
+  final FocusNode? focusNode;
   final FormFieldValidator<String> validator;
 
   const CustomTextFormField({
@@ -13,6 +15,8 @@ class CustomTextFormField extends StatefulWidget {
     required this.keyboardType,
     required this.label,
     this.readOnly = false,
+    this.suffix = const SizedBox.shrink(),
+    this.focusNode,
     this.validator = _defaultValidator,
   });
 
@@ -45,6 +49,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           controller: widget.controller,
           keyboardType: widget.keyboardType,
           readOnly: widget.readOnly,
+          decoration: InputDecoration(suffixIcon: widget.suffix),
+          focusNode: widget.focusNode,
           validator: widget.validator,
         ),
       ],

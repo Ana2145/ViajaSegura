@@ -1,38 +1,23 @@
 import 'package:flutter/material.dart';
 
 class IconText extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final double iconSize;
-  final double textSize;
-  final Color iconColor;
+  final int passengers;
 
-  const IconText({
-    super.key,
-    required this.icon,
-    required this.text,
-    this.iconSize = 18,
-    this.textSize = 12,
-    this.iconColor = Colors.black,
-  });
+  const IconText({super.key, required this.passengers});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Icon(icon, size: iconSize, color: iconColor),
-        Positioned(
-          top: -4,
-          right: -6,
-          child: Text(text,
-              style: TextStyle(
-                fontSize: textSize,
-                color: const Color(0xFF7C4A36),
-                fontWeight: FontWeight.bold,
-              )),
-        )
-      ],
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Badge(
+        label: Text('$passengers'),
+        padding: const EdgeInsets.all(8),
+        backgroundColor: Colors.transparent,
+        textColor: theme.secondaryHeaderColor,
+        textStyle: const TextStyle(fontWeight: FontWeight.bold),
+        child: Icon(Icons.person_outline, color: theme.secondaryHeaderColor),
+      ),
     );
   }
 }

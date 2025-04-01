@@ -4,8 +4,15 @@ import 'package:viaja_segura_movil/presentation/widgets/atoms/go_back_button.dar
 
 class AuthTemplate extends StatefulWidget {
   final String title;
-  final Widget form;
-  const AuthTemplate({super.key, required this.title, required this.form});
+  final double height;
+  final Widget child;
+
+  const AuthTemplate({
+    super.key,
+    required this.title,
+    this.height = 64.0,
+    required this.child,
+  });
 
   @override
   State<AuthTemplate> createState() => _AuthTemplateState();
@@ -38,13 +45,13 @@ class _AuthTemplateState extends State<AuthTemplate> {
                               Text(widget.title,
                                   style: theme.textTheme.headlineLarge),
                               const SizedBox(height: 64),
-                              widget.form,
+                              widget.child,
                             ],
                           ),
                         ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: widget.form,
+                        child: widget.child,
                       )
                     ],
                   ),

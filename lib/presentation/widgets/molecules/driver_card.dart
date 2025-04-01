@@ -1,116 +1,105 @@
 import 'package:flutter/material.dart';
-import '../atoms/icon_text.dart';
+import 'package:viaja_segura_movil/presentation/widgets/atoms/car_image.dart';
+import 'package:viaja_segura_movil/presentation/widgets/atoms/icon_text.dart';
+import 'package:viaja_segura_movil/presentation/widgets/organisms/driver_info_bottom_sheet.dart';
 
-class DriverCard extends StatelessWidget {
-  final String carImage;
+class DriverCard extends StatefulWidget {
   final String carName;
   final String plateNumber;
+  final String color;
   final int passengers;
-  final VoidCallback onTap;
-  final VoidCallback onMoreInfo;
 
   const DriverCard({
     super.key,
-    required this.carImage,
     required this.carName,
     required this.plateNumber,
+    required this.color,
     required this.passengers,
-    required this.onTap,
-    required this.onMoreInfo,
   });
 
   @override
+  State<DriverCard> createState() => _DriverCardState();
+}
+
+class _DriverCardState extends State<DriverCard> {
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            children: [
-              SizedBox(
-                //container img auto
-                width: MediaQuery.of(context).size.width * 0.3,
-                child: Image.asset(carImage, fit: BoxFit.contain),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                  child: Column(
+    final theme = Theme.of(context);
+    return Card(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            CarImage(color: widget.color),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    //name & passengers
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          carName,
-                          style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF7C4A36)),
-                          overflow:
-                              TextOverflow.ellipsis, //evita desbordamientos
-                        ),
-                      ),
-                      IconText(
-                        icon: Icons.person,
-                        text: "$passengers",
-                        iconColor: const Color(0xFF7C4A36),
-                      ),
-                    ],
+                  Text(
+                    widget.carName,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.secondaryHeaderColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  const SizedBox(
-                    height: 8,
+                  const SizedBox(height: 16),
+                  Text(
+                    "Placas",
+                    style: TextStyle(
+                      color: theme.primaryColor.withOpacity(0.5),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  Row(
-                    //plate & more info
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Placas",
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Text(
-                            plateNumber,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Color(0XFF7C4A36),
-                            ),
-                          ),
-                        ],
-                      )),
-                      TextButton(
-                        onPressed: onMoreInfo,
-                        style: TextButton.styleFrom(
-                          foregroundColor: const Color(0xFF7C4A36),
-                          backgroundColor: const Color(0xFFE2D5CA),
-                          minimumSize: const Size(0, 0),
-                          padding:
-                              const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                        ),
-                        child: const Text("Más info",
-                            style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  )
+                  Text(
+                    widget.plateNumber,
+                    style: TextStyle(color: theme.secondaryHeaderColor),
+                  ),
                 ],
-              ))
-            ],
-          ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Column(
+              children: [
+                IconText(passengers: widget.passengers),
+                ElevatedButton(
+                  onPressed: _bottomSheetDriver,
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.tertiary,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 0.0,
+                      horizontal: 16.0,
+                    ),
+                  ),
+                  child: Text(
+                    "Ver más",
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.secondaryHeaderColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  void _bottomSheetDriver() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return DriverInfoBottomSheet(
+          carName: widget.carName,
+          plateNumber: widget.plateNumber,
+          passengers: widget.passengers,
+          color: widget.color,
+        );
+      },
     );
   }
 }

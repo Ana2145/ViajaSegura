@@ -7,6 +7,6 @@ class DriverDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthTemplate(title: '', form: const DriverInfoContent());
+    return AuthTemplate(title: '', child: const DriverInfoContent());
   }
 }
