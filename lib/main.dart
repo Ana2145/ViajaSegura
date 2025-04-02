@@ -130,9 +130,11 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashScreen(),
         '/welcome_screen': (context) => const WelcomeScreen(),
-        '/login_screen': (context) => const UserProfileScreen(),
+        '/home': (context) => const MainScreen(),
+        '/login_screen': (context) => const LoginScreen(),
         '/main_screen': (context) => const MainScreen(),
         '/driver_info_screen': (context) => const DriverInfoScreen(),
+        '/profile_screen': (context) => const UserProfileScreen(),
       },
     );
   }
