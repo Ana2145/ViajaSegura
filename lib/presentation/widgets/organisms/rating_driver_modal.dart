@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:viaja_segura_movil/core/constants/app_colors.dart';
 
-class RatingModal extends StatefulWidget {
-  const RatingModal({super.key});
+class RatingDriverModal extends StatefulWidget {
+  const RatingDriverModal({super.key});
 
   @override
-  _RatingModalState createState() => _RatingModalState();
+  _RatingDriverModalState createState() => _RatingDriverModalState();
 }
 
-class _RatingModalState extends State<RatingModal> {
+class _RatingDriverModalState extends State<RatingDriverModal> {
   int _selectedStars = 0;
 
   void _onStarTap(int index) {
@@ -27,10 +27,8 @@ class _RatingModalState extends State<RatingModal> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              "Calificar viaje",
-              style: theme.textTheme.headlineMedium,
-            ),
+            Text("Calificar conductor(a)",
+                style: theme.textTheme.headlineMedium),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +41,7 @@ class _RatingModalState extends State<RatingModal> {
                       Icons.star,
                       size: 30,
                       color: index < _selectedStars
-                          ? AppColors.secondaryColor
+                          ? Colors.orange
                           : AppColors.contentColor.withOpacity(0.3),
                     ),
                   ),
