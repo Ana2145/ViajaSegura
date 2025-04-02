@@ -4,7 +4,9 @@ import 'package:viaja_segura_movil/core/constants/app_colors.dart';
 import 'package:viaja_segura_movil/presentation/screens/driver_info_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/login_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/main_screen.dart';
+import 'package:viaja_segura_movil/presentation/screens/notification_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/splash_screen.dart';
+import 'package:viaja_segura_movil/presentation/screens/travel_history_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/user_profile_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/welcome_screen.dart';
 
@@ -135,6 +137,8 @@ class MyApp extends StatelessWidget {
         '/main_screen': (context) => const MainScreen(),
         '/driver_info_screen': (context) => const DriverInfoScreen(),
         '/profile_screen': (context) => const UserProfileScreen(),
+        '/notifications_screen': (context) => const NotificationScreen(),
+        '/travel_history_screen': (context) => const TravelHistoryScreen(),
       },
     );
   }
