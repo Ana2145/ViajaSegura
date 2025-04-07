@@ -6,6 +6,7 @@ import 'package:viaja_segura_movil/core/services/map_location_services.dart';
 import 'package:viaja_segura_movil/presentation/screens/trip_selection_screen.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/location_fab.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/top_bar.dart';
+import 'package:viaja_segura_movil/presentation/widgets/organisms/custom_drawer.dart';
 import 'package:viaja_segura_movil/presentation/widgets/templates/map_bottom_panel.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/map_view.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/text_field_button.dart';
@@ -94,7 +95,9 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      drawerEnableOpenDragGesture: false,
       appBar: const TopBar(),
+      drawer: const CustomDrawer(),
       body: Stack(
         children: [
           if (_isLoading)

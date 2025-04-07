@@ -8,26 +8,28 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
-          onPressed: () => {},
-          icon: const Icon(
-            Icons.menu,
-            size: 30,
-            color: Color(0xFF773357),
-          ),
+          onPressed: () => {
+            Scaffold.of(context).openDrawer(),
+          },
+          icon: Icon(Icons.menu, size: 32, color: theme.primaryColor),
         ),
-        actions: const [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.transparent,
-            child: Icon(
-              Icons.account_circle,
-              size: 35,
-              color: Color(0xFF773357),
+        actions: [
+          InkWell(
+            onTap: () => Navigator.of(context).pushNamed('/profile_screen'),
+            child: CircleAvatar(
+              radius: 24,
+              backgroundColor: Colors.transparent,
+              child: Icon(
+                Icons.account_circle,
+                size: 32,
+                color: theme.primaryColor,
+              ),
             ),
           )
         ],
