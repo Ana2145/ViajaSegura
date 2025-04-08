@@ -28,66 +28,76 @@ class _UserProfileFormState extends State<UserProfileForm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         const ChangeUserPhoto(),
         const SizedBox(height: 16.0),
-        CustomTextFormField(
-          label: 'Correo electrónico',
-          controller: _emailController,
-          keyboardType: TextInputType.emailAddress,
-          readOnly: true,
-        ),
-        const SizedBox(height: 16.0),
-        CustomTextFormField(
-          label: 'Nombre',
-          controller: _nameController,
-          keyboardType: TextInputType.text,
-          readOnly: true,
-          suffix: EditUserInfoButton(
-            label: 'Nombre',
-            controller: _nameController,
-            keyboardType: TextInputType.text,
+        Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: theme.primaryColor),
           ),
-        ),
-        const SizedBox(height: 16.0),
-        CustomTextFormField(
-          label: 'Apellido(s)',
-          controller: _surnameController,
-          keyboardType: TextInputType.text,
-          readOnly: true,
-          suffix:
-            EditUserInfoButton(
-              label: 'Apellido(s)',
-              controller: _surnameController,
-              keyboardType: TextInputType.text,
-            ),
-        ),
-        const SizedBox(height: 16.0),
-        CustomTextFormField(
-          label: 'Número de teléfono',
-          controller: _phoneController,
-          keyboardType: TextInputType.number,
-          readOnly: true,
-          suffix:
-            EditUserInfoButton(
-              label: 'Número de teléfono',
-              controller: _phoneController,
-              keyboardType: TextInputType.number,
-            ),
-        ),
-        const SizedBox(height: 16.0),
-        CustomTextFormField(
-          label: 'Cambiar contraseña',
-          controller: _passwordController,
-          keyboardType: TextInputType.text,
-          readOnly: true,
-          suffix:
-            EditUserInfoButton(
-              label: 'Contraseña',
-              controller: _passwordController,
-              keyboardType: TextInputType.text,
-            ),
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            children: [
+              CustomTextFormField(
+                label: 'Correo electrónico',
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                readOnly: true,
+              ),
+              const SizedBox(height: 16.0),
+              CustomTextFormField(
+                label: 'Nombre',
+                controller: _nameController,
+                keyboardType: TextInputType.text,
+                readOnly: true,
+                suffix: EditUserInfoButton(
+                  label: 'Nombre',
+                  controller: _nameController,
+                  keyboardType: TextInputType.text,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              CustomTextFormField(
+                label: 'Apellido(s)',
+                controller: _surnameController,
+                keyboardType: TextInputType.text,
+                readOnly: true,
+                suffix: EditUserInfoButton(
+                  label: 'Apellido(s)',
+                  controller: _surnameController,
+                  keyboardType: TextInputType.text,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              CustomTextFormField(
+                label: 'Número de teléfono',
+                controller: _phoneController,
+                keyboardType: TextInputType.number,
+                readOnly: true,
+                suffix: EditUserInfoButton(
+                  label: 'Número de teléfono',
+                  controller: _phoneController,
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              CustomTextFormField(
+                label: 'Cambiar contraseña',
+                controller: _passwordController,
+                keyboardType: TextInputType.text,
+                readOnly: true,
+                suffix: EditUserInfoButton(
+                  label: 'Contraseña',
+                  controller: _passwordController,
+                  keyboardType: TextInputType.text,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

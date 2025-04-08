@@ -31,7 +31,7 @@ class _ChangeUserPhotoState extends State<ChangeUserPhoto> {
           children: [
             // Avatar
             CircleAvatar(
-              radius: 80,
+              radius: 72,
               backgroundImage: _image == null
                   ? const AssetImage('assets/images/default_avatar.png')
                   : FileImage(File(_image!.path)) as ImageProvider,
