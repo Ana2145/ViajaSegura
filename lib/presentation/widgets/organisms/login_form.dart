@@ -37,19 +37,21 @@ class _LoginFormState extends State<LoginForm> {
           Row(
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/recover_password');
+                },
                 child: Text(
-                  '¿Olvidaste tu usuario?',
+                  '¿Olvidaste tu contraseña?',
                   style: theme.textTheme.bodySmall,
                 ),
               ),
               const Spacer(),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/recover_password');
+                  Navigator.pushNamed(context, '/create_account');
                 },
                 child: Text(
-                  '¿Olvidaste tu contraseña?',
+                  '¿No tienes una cuenta?',
                   style: theme.textTheme.bodySmall,
                 ),
               ),
