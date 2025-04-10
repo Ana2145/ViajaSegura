@@ -3,13 +3,13 @@ import 'package:viaja_segura_movil/presentation/widgets/atoms/car_image.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/icon_text.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/driver_info_bottom_sheet.dart';
 
-class DriverCard extends StatefulWidget {
+class TripDriverCard extends StatefulWidget {
   final String carName;
   final String plateNumber;
   final String color;
   final int passengers;
 
-  const DriverCard({
+  const TripDriverCard({
     super.key,
     required this.carName,
     required this.plateNumber,
@@ -18,15 +18,15 @@ class DriverCard extends StatefulWidget {
   });
 
   @override
-  State<DriverCard> createState() => _DriverCardState();
+  State<TripDriverCard> createState() => _TripDriverCardState();
 }
 
-class _DriverCardState extends State<DriverCard> {
+class _TripDriverCardState extends State<TripDriverCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Card(
-      color: Colors.white,
+      color: theme.canvasColor,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
