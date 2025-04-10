@@ -28,17 +28,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
             child: const Center(child: Logo()),
           ),
           _buildOption(
-            Badge.count(
-              count: 3,
-              child: const Icon(Icons.notifications),
-            ),
+            Badge.count(count: 3, child: const Icon(Icons.notifications)),
             'Notificaciones',
             '/notifications_screen',
           ),
           _buildOption(
             const Icon(Icons.local_taxi),
             'Historial de viajes',
-            '/travel_history_screen',
+            '/trip_history_screen',
           ),
           _buildOption(
             const Icon(Icons.qr_code),

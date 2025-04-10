@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/car_image.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/custom_button.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/icon_text.dart';
+import 'package:viaja_segura_movil/presentation/widgets/molecules/driver_card_info.dart';
 
 class DriverInfoBottomSheet extends StatefulWidget {
   final String carName;
@@ -51,23 +52,10 @@ class _DriverInfoBottomSheetState extends State<DriverInfoBottomSheet> {
             style: theme.textTheme.headlineSmall,
           ),
           const SizedBox(height: 32.0),
-          Card(
-            color: Colors.white,
-            elevation: 0,
-            child: ListTile(
-              onTap: _showDriverInfo,
-              leading: const CircleAvatar(
-                radius: 24,
-                child: Icon(Icons.person),
-              ),
-              title: const Text("Nombre del conductor"),
-              subtitle: const Text("Organización"),
-              trailing: const Icon(Icons.info_outlined),
-            ),
-          ),
+          DriverCardInfo(),
           const SizedBox(height: 8.0),
           Card(
-            color: Colors.white,
+            color: theme.canvasColor,
             elevation: 0,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -95,9 +83,5 @@ class _DriverInfoBottomSheetState extends State<DriverInfoBottomSheet> {
         ],
       ),
     );
-  }
-
-  void _showDriverInfo() {
-    Navigator.of(context).pushNamed("/driver_info_screen");
   }
 }

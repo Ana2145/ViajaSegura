@@ -28,7 +28,12 @@ class _DrawerBottomCardTemplateState extends State<DrawerBottomCardTemplate> {
           ),
           color: theme.canvasColor,
         ),
-        child: SingleChildScrollView(child: Column(children: widget.children)),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widget.children,
+          ),
+        ),
       ),
     );
   }
