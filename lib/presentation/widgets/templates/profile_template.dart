@@ -22,15 +22,14 @@ class ProfileTemplate extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            PatternRow(color: theme.primaryColor, height: 4),
+            PatternRow(
+              color: theme.colorScheme.tertiary,
+              isTransparent: false,
+              height: 4,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                children: [
-                  GoBackTitle(title: title),
-                  child,
-                ],
-              ),
+              child: Column(children: [GoBackTitle(title: title), child]),
             ),
           ],
         ),
