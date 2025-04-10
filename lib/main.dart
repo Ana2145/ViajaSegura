@@ -5,6 +5,7 @@ import 'package:viaja_segura_movil/presentation/screens/driver_info_screen.dart'
 import 'package:viaja_segura_movil/presentation/screens/login_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/main_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/notifications_screen.dart';
+import 'package:viaja_segura_movil/presentation/screens/recover_password_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/splash_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/travel_history_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/user_profile_screen.dart';
@@ -134,6 +135,7 @@ class MyApp extends StatelessWidget {
         '/welcome_screen': (context) => const WelcomeScreen(),
         '/home': (context) => const MainScreen(),
         '/login_screen': (context) => const LoginScreen(),
+        '/recover_password': (context) => const RecoverPasswordScreen(),
         '/main_screen': (context) => const MainScreen(),
         '/driver_info_screen': (context) => const DriverInfoScreen(),
         '/profile_screen': (context) => const UserProfileScreen(),

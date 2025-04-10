@@ -45,7 +45,9 @@ class _LoginFormState extends State<LoginForm> {
               ),
               const Spacer(),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/recover_password');
+                },
                 child: Text(
                   '¿Olvidaste tu contraseña?',
                   style: theme.textTheme.bodySmall,
