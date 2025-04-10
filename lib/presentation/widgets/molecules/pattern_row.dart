@@ -4,13 +4,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 class PatternRow extends StatelessWidget {
   final Color color;
   final bool isReversed;
+  final bool isTransparent;
   final int height;
 
   const PatternRow({
     super.key,
     required this.color,
-    this.height = 6,
     this.isReversed = false,
+    this.isTransparent = true,
+    this.height = 6,
   });
 
   @override
@@ -31,7 +33,7 @@ class PatternRow extends StatelessWidget {
           children: List.generate(
             patternCount,
             (_) => Opacity(
-              opacity: 0.15,
+              opacity: isTransparent ? 0.15 : 1,
               child: Transform.rotate(
                 angle: isReversed ? 3.14159 : 0,
                 child: SvgPicture.asset(
