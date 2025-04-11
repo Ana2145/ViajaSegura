@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:viaja_segura_movil/core/constants/app_colors.dart';
+import 'package:viaja_segura_movil/data/repositories/auth_repository.dart';
 import 'package:viaja_segura_movil/presentation/screens/create_account_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/driver_info_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/login_screen.dart';
@@ -14,8 +16,26 @@ import 'package:viaja_segura_movil/presentation/screens/trip_history_screen.dart
 import 'package:viaja_segura_movil/presentation/screens/user_profile_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/welcome_screen.dart';
 
+import 'data/cubits/auth/auth_cubit.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(create: (context) => AuthRepository()),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthCubit(
+              authRepository: context.read<AuthRepository>(),
+            ),
+          ),
+        ],
+        child: const MyApp(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
