@@ -52,7 +52,7 @@ class _DriverInfoBottomSheetState extends State<DriverInfoBottomSheet> {
             style: theme.textTheme.headlineSmall,
           ),
           const SizedBox(height: 32.0),
-          DriverCardInfo(),
+          const DriverCardInfo(),
           const SizedBox(height: 8.0),
           Card(
             color: theme.canvasColor,

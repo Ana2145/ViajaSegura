@@ -15,8 +15,6 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Form(
       key: _formKey,
       child: Column(
