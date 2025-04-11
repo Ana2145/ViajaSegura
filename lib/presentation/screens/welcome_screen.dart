@@ -31,7 +31,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 const SizedBox(height: 16),
                 TextButton(
-                  onPressed: () => _navigateTo('/register_screen'),
+                  onPressed: () => _navigateTo('/create_account'),
                   child: Text(
                     'Crear una cuenta',
                     style: theme.textTheme.bodyMedium?.copyWith(
