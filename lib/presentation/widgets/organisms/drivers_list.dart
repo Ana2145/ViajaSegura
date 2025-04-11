@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:viaja_segura_movil/presentation/widgets/molecules/driver_card.dart';
+import 'package:viaja_segura_movil/presentation/widgets/molecules/trip_driver_card.dart';
 import 'package:viaja_segura_movil/presentation/widgets/templates/map_bottom_panel.dart';
 
 class DriversList extends StatefulWidget {
@@ -50,7 +50,7 @@ class _DriversListState extends State<DriversList> {
         child: Column(
           children: [
             for (final driver in drivers)
-              DriverCard(
+              TripDriverCard(
                 carName: driver["carName"],
                 plateNumber: driver["plateNumber"],
                 passengers: driver["passengers"],

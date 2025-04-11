@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
-import 'package:viaja_segura_movil/core/services/map_location_services.dart';
+import 'package:viaja_segura_movil/data/services/map_location_services.dart';
 import 'package:viaja_segura_movil/presentation/screens/trip_selection_screen.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/location_fab.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/top_bar.dart';

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:viaja_segura_movil/data/cubits/auth/auth_cubit.dart';
+import 'package:viaja_segura_movil/data/cubits/auth/auth_state.dart';
+import 'package:viaja_segura_movil/data/models/auth_model.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/custom_button.dart';
+import 'package:viaja_segura_movil/presentation/widgets/atoms/custom_snack_bar.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/custom_text_form_field.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/custom_text_form_field_password.dart';
 
@@ -17,6 +22,25 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          Navigator.pushNamed(context, "/");
+        } else if (state is AuthError) {
+          CustomSnackBar.show(
+            context,
+            message: state.message,
+            snackBarType: SnackBarType.error,
+          );
+        }
+      },
+      builder: (context, state) {
+        return _buildForm();
+      },
+    );
+  }
+
+  Widget _buildForm() {
     final theme = Theme.of(context);
     return Form(
       key: _formKey,
@@ -84,11 +108,12 @@ class _LoginFormState extends State<LoginForm> {
 
   void _onSubmit() {
     if (_formKey.currentState!.validate()) {
-      //final email = _emailController.text;
-      //final password = _passwordController.text;
+      final auth = AuthModel(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/main_screen', (route) => false);
+      context.read<AuthCubit>().login(auth);
     }
   }
 }

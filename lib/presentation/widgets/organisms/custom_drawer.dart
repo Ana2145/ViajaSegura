@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:viaja_segura_movil/data/cubits/auth/auth_cubit.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/logo.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -28,17 +30,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
             child: const Center(child: Logo()),
           ),
           _buildOption(
-            Badge.count(
-              count: 3,
-              child: const Icon(Icons.notifications),
-            ),
+            Badge.count(count: 3, child: const Icon(Icons.notifications)),
             'Notificaciones',
             '/notifications_screen',
           ),
           _buildOption(
             const Icon(Icons.local_taxi),
             'Historial de viajes',
-            '/travel_history_screen',
+            '/trip_history_screen',
           ),
           _buildOption(
             const Icon(Icons.qr_code),
@@ -46,13 +45,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
             '/qr_code_scanning_screen',
           ),
           const Spacer(),
-          _buildOption(
-            const Icon(Icons.exit_to_app),
-            'Cerrar sesión',
-            '/welcome_screen',
+          ListTile(
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Cerrar sesión'),
+            onTap: _logout,
           ),
         ],
       ),
     );
+  }
+
+  void _logout() {
+    context.read<AuthCubit>().logout();
+    Navigator.of(context, rootNavigator: true).pushNamed('/');
   }
 }
