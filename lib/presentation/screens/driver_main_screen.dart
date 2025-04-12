@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:viaja_segura_movil/data/services/map_location_services.dart';
-import 'package:viaja_segura_movil/presentation/widgets/atoms/custom_button.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/location_fab.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/top_bar.dart';
+import 'package:viaja_segura_movil/presentation/widgets/organisms/driver_availability_button.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/driver_drawer.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/map_view.dart';
 import 'package:viaja_segura_movil/presentation/widgets/templates/map_bottom_panel.dart';
@@ -77,15 +77,12 @@ class _DriverMainScreenState extends State<DriverMainScreen> {
               currentPosition: _currentPosition,
             ),
           if (!_isLoading) ...[
-            Positioned(
+            const Positioned(
               bottom: 0,
               left: 0,
               right: 0,
               child: MapBottomPanel(
-                child: CustomButton(
-                  text: 'Listo para viajar',
-                  onPressed: () {},
-                ),
+                child: DriverAvailabilityButton(),
               ),
             ),
             Positioned(
