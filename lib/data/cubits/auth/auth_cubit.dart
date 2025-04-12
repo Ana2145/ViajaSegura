@@ -11,17 +11,21 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> login(AuthModel auth) async {
     emit(AuthLoading());
-    final response = await authRepository.login(auth);
 
-    if (response.error) {
-      emit(AuthError(response.message));
-    } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      final response = await authRepository.login(auth);
 
-      await prefs.setString('token', response.token);
-      await prefs.setString('role', response.role);
+      if (response.error) {
+        emit(AuthError(response.message));
+      } else {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', response.token);
+        await prefs.setString('role', response.role);
 
-      emit(AuthAuthenticated(auth));
+        emit(AuthAuthenticated(auth));
+      }
+    } catch (e, stackTrace) {
+      emit(AuthError('Error inesperado al hacer login'));
     }
   }
 
