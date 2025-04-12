@@ -86,11 +86,7 @@ class _LoginFormState extends State<LoginForm> {
             text: 'Ingresar',
             onPressed: _onSubmit,
           ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () {},
-            child: const Text('Crear una cuenta'),
-          ),
+          const SizedBox(height: 24)
         ],
       ),
     );
