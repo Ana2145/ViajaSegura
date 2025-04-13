@@ -35,4 +35,16 @@ class DriverCubit extends Cubit<DriverState> {
       emit(DriverError('Error al obtener datos del conductor'));
     }
   }
+
+  Future<void> updatedDriver(
+      {required int id, required Map<String, dynamic> updatedData}) async {
+    try {
+      emit(DriverLoading());
+      await _repository.updateDriverInfo(id, updatedData);
+      final updatedDriver = await _repository.fetchDriverById(id);
+      emit(DriverLoaded(updatedDriver));
+    } catch (e) {
+      emit(DriverError('Error al actualizar la información del conductor'));
+    }
+  }
 }

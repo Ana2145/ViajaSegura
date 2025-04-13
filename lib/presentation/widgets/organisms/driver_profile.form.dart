@@ -49,86 +49,126 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
           _emailController.text = _driver!.email;
           _phoneController.text = _driver!.phoneNumber;
         });
-      } else if (state is DriverError) {
-        print('[ERROR] ${state.message}');
       }
     }
+  }
+
+  Future<void> _saveDriverInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getInt('id');
+
+    if (id == null) {
+      return;
+    }
+
+    final updatedData = {
+      'name': _nameController.text,
+      'lastName': _surnameController.text,
+      'phone': _phoneController.text,
+    };
+
+    context.read<DriverCubit>().updatedDriver(id: id, updatedData: updatedData);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        const ChangeUserPhoto(),
-        const SizedBox(height: 16.0),
-        Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: theme.primaryColor),
-          ),
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            children: [
-              CustomTextFormField(
-                label: 'Correo electrónico',
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                readOnly: true,
-              ),
-              const SizedBox(height: 16.0),
-              CustomTextFormField(
-                label: 'Nombre',
-                controller: _nameController,
-                keyboardType: TextInputType.text,
-                readOnly: true,
-                suffix: EditUserInfoButton(
+    return BlocListener<DriverCubit, DriverState>(
+      listener: (context, state) {
+        if (state is DriverLoaded) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('Información actualizada exitosamente')),
+          );
+        } else if (state is DriverError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${state.message}')),
+          );
+        }
+      },
+      child: Column(
+        children: [
+          const ChangeUserPhoto(),
+          const SizedBox(height: 16.0),
+          Container(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: theme.primaryColor),
+            ),
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                CustomTextFormField(
+                  label: 'Correo electrónico',
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  readOnly: true,
+                ),
+                const SizedBox(height: 16.0),
+                CustomTextFormField(
                   label: 'Nombre',
                   controller: _nameController,
                   keyboardType: TextInputType.text,
+                  readOnly: true,
+                  suffix: EditUserInfoButton(
+                    label: 'Nombre',
+                    controller: _nameController,
+                    keyboardType: TextInputType.text,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              CustomTextFormField(
-                label: 'Apellido(s)',
-                controller: _surnameController,
-                keyboardType: TextInputType.text,
-                readOnly: true,
-                suffix: EditUserInfoButton(
+                const SizedBox(height: 16.0),
+                CustomTextFormField(
                   label: 'Apellido(s)',
                   controller: _surnameController,
                   keyboardType: TextInputType.text,
+                  readOnly: true,
+                  suffix: EditUserInfoButton(
+                    label: 'Apellido(s)',
+                    controller: _surnameController,
+                    keyboardType: TextInputType.text,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              CustomTextFormField(
-                label: 'Número de teléfono',
-                controller: _phoneController,
-                keyboardType: TextInputType.number,
-                readOnly: true,
-                suffix: EditUserInfoButton(
+                const SizedBox(height: 16.0),
+                CustomTextFormField(
                   label: 'Número de teléfono',
                   controller: _phoneController,
                   keyboardType: TextInputType.number,
+                  readOnly: true,
+                  suffix: EditUserInfoButton(
+                    label: 'Número de teléfono',
+                    controller: _phoneController,
+                    keyboardType: TextInputType.number,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              CustomTextFormField(
-                label: 'Cambiar contraseña',
-                controller: _passwordController,
-                keyboardType: TextInputType.text,
-                readOnly: true,
-                suffix: EditUserInfoButton(
-                  label: 'Contraseña',
+                const SizedBox(height: 16.0),
+                CustomTextFormField(
+                  label: 'Cambiar contraseña',
                   controller: _passwordController,
                   keyboardType: TextInputType.text,
+                  readOnly: true,
+                  suffix: EditUserInfoButton(
+                    label: 'Contraseña',
+                    controller: _passwordController,
+                    keyboardType: TextInputType.text,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: _saveDriverInfo,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: const Text('Guardar cambios'),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

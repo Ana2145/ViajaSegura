@@ -19,4 +19,15 @@ class DriverRepository {
       throw Exception('Error al obtener el conductor: ${e.message}');
     }
   }
+
+  Future<void> updateDriverInfo(
+      int id, Map<String, dynamic> updatedData) async {
+    try {
+      final response =
+          await dio.put('/users/drivers/$id/info', data: updatedData);
+    } on DioException catch (e) {
+      throw Exception(
+          'Error al actualizar la información del conductor: ${e.message}');
+    }
+  }
 }
