@@ -10,7 +10,7 @@ class AuthRepository {
   Future<AuthResponse> login(AuthModel auth) async {
     try {
       final response =
-      await dio.post('/auth/login', data: jsonEncode(auth.toJson()));
+          await dio.post('/auth/login', data: jsonEncode(auth.toJson()));
 
       return AuthResponse.fromJson(response.data);
     } on DioException catch (e) {
@@ -18,6 +18,7 @@ class AuthRepository {
         return AuthResponse(
           token: '',
           role: '',
+          id: 0,
           error: true,
           statusCode: 401,
           message: 'Correo electrónico o contraseña incorrectos',
@@ -26,6 +27,7 @@ class AuthRepository {
         return AuthResponse(
           token: '',
           role: '',
+          id: 0,
           error: true,
           statusCode: e.response?.statusCode ?? 500,
           message: e.response?.data['message'] ?? 'Error de conexión',

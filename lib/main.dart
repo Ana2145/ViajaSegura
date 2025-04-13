@@ -5,6 +5,7 @@ import 'package:viaja_segura_movil/core/constants/app_colors.dart';
 import 'package:viaja_segura_movil/data/repositories/auth_repository.dart';
 import 'package:viaja_segura_movil/presentation/screens/create_account_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/driver_info_screen.dart';
+import 'package:viaja_segura_movil/presentation/screens/driver_profile_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/login_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/main_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/notifications_screen.dart';
@@ -162,7 +163,7 @@ class MyApp extends StatelessWidget {
         '/create_account': (context) => const CreateAccountScreen(),
         '/main_screen': (context) => const MainScreen(),
         '/driver_info_screen': (context) => const DriverInfoScreen(),
-        '/profile_screen': (context) => const UserProfileScreen(),
+        '/profile_screen': (context) => const DriverProfileScreen(),
         '/notifications_screen': (context) => const NotificationsScreen(),
         '/trip_history_screen': (context) => const TripHistoryScreen(),
         '/qr_code_scanning_screen': (context) => const QrCodeScanningScreen(),
