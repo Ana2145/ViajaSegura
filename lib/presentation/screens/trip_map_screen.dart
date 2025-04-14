@@ -1,28 +1,31 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:math' as math;
-
 import 'package:latlong2/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-
+import 'package:viaja_segura_movil/presentation/widgets/atoms/custom_snack_bar.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/location_fab.dart';
+import 'package:viaja_segura_movil/presentation/widgets/molecules/searching_for_driver.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/top_bar.dart';
+import 'package:viaja_segura_movil/presentation/widgets/organisms/custom_drawer.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/drivers_list.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/map_view.dart';
-import 'package:viaja_segura_movil/presentation/widgets/organisms/text_field_button.dart';
+import 'package:viaja_segura_movil/presentation/widgets/organisms/route_buttons_panel.dart';
 
 class TripMapScreen extends StatefulWidget {
-  final String start;
-  final String destination;
+  final String? start;
+  final String? destination;
   final LatLng? startPosition;
+  final LatLng? destinationPosition;
 
   const TripMapScreen({
     super.key,
-    required this.start,
-    required this.destination,
+    this.start,
+    this.destination,
     this.startPosition,
+    this.destinationPosition,
   });
 
   @override
@@ -32,24 +35,56 @@ class TripMapScreen extends StatefulWidget {
 class _TripMapScreenState extends State<TripMapScreen> {
   final MapController _mapController = MapController();
   late List<LatLng> _route = [];
+  final bool _mapInitialized = false;
   LatLng? _startLocation;
   LatLng? _destinationLocation;
   bool _isLoading = true;
-  final bool _mapInitialized = false;
+  bool isSearchingForDriver = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _calculateRoute();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _calculateRoute());
   }
 
-  Future<LatLng> _getLocationCoordinates(String location) async {
-    if (location == widget.start && widget.startPosition != null) {
-      return widget.startPosition!;
-    }
+  Future<void> _calculateRoute() async {
+    try {
+      if (widget.startPosition != null && widget.destinationPosition != null) {
+        _startLocation = widget.startPosition;
+        _destinationLocation = widget.destinationPosition;
+      } else if (widget.start != null && widget.destination != null) {
+        _startLocation = await _getLocationCoordinates(widget.start!);
+        _destinationLocation =
+            await _getLocationCoordinates(widget.destination!);
+      }
 
+      await _fetchDirections();
+
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      if (!_mapInitialized) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+      _moveToRoute();
+      //_startSearchingForDriver();
+    } catch (e) {
+      if (!mounted) return;
+      CustomSnackBar.show(
+        context,
+        message: 'Error al obtener la ruta: $e',
+        snackBarType: SnackBarType.error,
+      );
+      Navigator.pop(context);
+    }
+  }
+
+  //Future<void> _startSearchingForDriver() async {
+  //  setState(() => isSearchingForDriver = true);
+  //}
+
+
+  Future<LatLng> _getLocationCoordinates(String location) async {
     final url = Uri.parse(
         'https://nominatim.openstreetmap.org/search?q=$location&format=json&limit=1');
     final response = await http.get(url);
@@ -66,38 +101,13 @@ class _TripMapScreenState extends State<TripMapScreen> {
     throw Exception('Ubicación no encontrada');
   }
 
-  Future<void> _calculateRoute() async {
-    try {
-      _startLocation = await _getLocationCoordinates(widget.start);
-      _destinationLocation = await _getLocationCoordinates(widget.destination);
-      await _fetchDirections();
-
-      if (!mounted) return;
-      setState(() => _isLoading = false);
-
-      if (!_mapInitialized) {
-        await Future.delayed(const Duration(milliseconds: 100));
-      }
-      _moveToRoute();
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error al obtener la ruta: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      Navigator.pop(context);
-    }
-  }
-
   Future<void> _fetchDirections() async {
     if (_startLocation == null || _destinationLocation == null) return;
 
     final url = Uri.parse("https://router.project-osrm.org/route/v1/driving/"
         "${_startLocation!.longitude},${_startLocation!.latitude};"
-        "${_destinationLocation!.longitude},${_destinationLocation!.latitude}"
-        "?overview=full&geometries=polyline");
+        "${_destinationLocation!.longitude},${_destinationLocation!.latitude}?"
+        "overview=full&geometries=polyline");
 
     final response = await http.get(url);
     if (response.statusCode == 200) {
@@ -149,10 +159,7 @@ class _TripMapScreenState extends State<TripMapScreen> {
           maxLng == null ? point.longitude : math.max(maxLng, point.longitude);
     }
 
-    return LatLngBounds(
-      LatLng(minLat!, minLng!),
-      LatLng(maxLat!, maxLng!),
-    );
+    return LatLngBounds(LatLng(minLat!, minLng!), LatLng(maxLat!, maxLng!));
   }
 
   double _calculateZoomLevel(LatLngBounds bounds) {
@@ -194,9 +201,13 @@ class _TripMapScreenState extends State<TripMapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool shouldShowRoutePanel =
+        widget.startPosition == null || widget.destinationPosition == null;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: const TopBar(),
+      drawer: const CustomDrawer(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Stack(
@@ -207,26 +218,15 @@ class _TripMapScreenState extends State<TripMapScreen> {
                   startLocation: _startLocation,
                   destinationLocation: _destinationLocation,
                 ),
-                Positioned(
-                  top: 96,
-                  right: 16,
-                  left: 16,
-                  child: Column(
-                    children: [
-                      TextFieldButton(
-                        icon: Icons.location_on,
-                        text: widget.start,
-                        onPressed: _goBack,
-                      ),
-                      const SizedBox(height: 8),
-                      TextFieldButton(
-                        icon: Icons.flag,
-                        text: widget.destination,
-                        onPressed: _goBack,
-                      ),
-                    ],
+                if (isSearchingForDriver)
+                  const SearchingForDriver(message: 'Buscando conductor...'),
+                if (shouldShowRoutePanel)
+                  RouteButtonsPanel(
+                    start: widget.start ?? "Inicio",
+                    destination: widget.destination ?? "Destino",
+                    onStartPressed: _goBack,
+                    onDestinationPressed: _goBack,
                   ),
-                ),
                 Positioned(
                   bottom: 0,
                   left: 0,

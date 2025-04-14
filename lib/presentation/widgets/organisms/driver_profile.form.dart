@@ -48,9 +48,9 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
         setState(() {
           _driver = state.driver;
           _nameController.text = _driver!.name;
-          _surnameController.text = _driver!.lastname;
+          _surnameController.text = _driver!.lastName;
           _emailController.text = _driver!.email;
-          _phoneController.text = _driver!.phoneNumber;
+          _phoneController.text = _driver!.phone;
         });
       }
     }

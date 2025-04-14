@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:viaja_segura_movil/presentation/screens/edit_text_field_page.dart';
+import 'package:viaja_segura_movil/presentation/screens/edit_text_field_screen.dart';
 
 class EditUserInfoButton extends StatefulWidget {
   final String label;
@@ -33,7 +33,7 @@ class _EditUserInfoButtonState extends State<EditUserInfoButton> {
     final editedValue = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditTextFieldPage(
+        builder: (context) => EditTextFieldScreen(
           label: widget.label,
           controller: widget.controller,
           keyboardType: widget.keyboardType,

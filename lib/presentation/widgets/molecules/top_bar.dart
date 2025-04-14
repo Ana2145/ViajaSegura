@@ -14,9 +14,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
       child: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
-          onPressed: () => {
-            Scaffold.of(context).openDrawer(),
-          },
+          onPressed: () => Scaffold.of(context).openDrawer(),
           icon: Icon(Icons.menu, size: 32, color: theme.primaryColor),
         ),
         actions: [

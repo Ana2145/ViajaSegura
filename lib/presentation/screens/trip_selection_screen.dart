@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:viaja_segura_movil/presentation/screens/trip_map_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:viaja_segura_movil/presentation/widgets/atoms/custom_button.dart';
+import 'package:viaja_segura_movil/presentation/widgets/atoms/custom_snack_bar.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/location_text_field.dart';
@@ -89,10 +90,14 @@ class _TripSelectionScreenState extends State<TripSelectionScreen> {
         final data = jsonDecode(response.body) as List;
         setState(() {
           if (isStart) {
-            _startSuggestions = data.map<String>((item) => item['display_name'] as String).toList();
+            _startSuggestions = data
+                .map<String>((item) => item['display_name'] as String)
+                .toList();
             _loadingStart = false;
           } else {
-            _destinationSuggestions = data.map<String>((item) => item['display_name'] as String).toList();
+            _destinationSuggestions = data
+                .map<String>((item) => item['display_name'] as String)
+                .toList();
             _loadingDestination = false;
           }
         });
@@ -110,11 +115,10 @@ class _TripSelectionScreenState extends State<TripSelectionScreen> {
 
   void _swapLocations() {
     if (_startController.text.isEmpty || _destinationController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Ingresa inicio y destino para intercambiar'),
-          duration: Duration(seconds: 2),
-        ),
+      CustomSnackBar.show(
+        context,
+        message: 'Ingresa inicio y destino para intercambiarlos.',
+        snackBarType: SnackBarType.error,
       );
       return;
     }
@@ -136,11 +140,10 @@ class _TripSelectionScreenState extends State<TripSelectionScreen> {
 
   void _navigateToTripMap() {
     if (_startController.text.isEmpty || _destinationController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor ingresa inicio y destino'),
-          duration: Duration(seconds: 2),
-        ),
+      CustomSnackBar.show(
+        context,
+        message: 'Ingresa inicio y destino para solicitar un viaje.',
+        snackBarType: SnackBarType.error,
       );
       return;
     }
@@ -236,8 +239,7 @@ class _TripSelectionScreenState extends State<TripSelectionScreen> {
           ],
         ),
       ),
-      bottomSheet:
-      Padding(
+      bottomSheet: Padding(
         padding: const EdgeInsets.all(16.0),
         child: CustomButton(
           text: 'Solicitar viaje',

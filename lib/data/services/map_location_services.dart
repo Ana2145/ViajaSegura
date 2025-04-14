@@ -15,9 +15,7 @@ class MapLocationServices {
 
   Future<bool> checkAndRequestService() async {
     bool serviceEnabled = await _location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await _location.requestService();
-    }
+    if (!serviceEnabled) serviceEnabled = await _location.requestService();
     return serviceEnabled;
   }
 

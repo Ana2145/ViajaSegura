@@ -23,7 +23,7 @@ class TripHistoryScreen extends StatelessWidget {
               title: "Viaje a ${trips[index]['title']!}",
               hasAction: true,
               onTap: () {
-                Navigator.pushNamed(context, '/trip_history_details');
+                Navigator.pushNamed(context, '/trip_history_details_screen');
               },
             );
           },

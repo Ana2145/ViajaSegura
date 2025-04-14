@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:viaja_segura_movil/core/configs/dio_client.dart';
 import 'package:viaja_segura_movil/data/models/auth_model.dart';
-import 'package:viaja_segura_movil/data/repositories/auth_response.dart';
+import 'package:viaja_segura_movil/data/models/auth_response.dart';
 
 class AuthRepository {
   final Dio dio = DioClient.instance;
@@ -14,6 +14,7 @@ class AuthRepository {
 
       return AuthResponse.fromJson(response.data);
     } on DioException catch (e) {
+      print("||||||||||ERROR $e");
       if (e.response?.statusCode == 401) {
         return AuthResponse(
           token: '',

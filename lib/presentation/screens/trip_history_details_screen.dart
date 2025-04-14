@@ -5,14 +5,16 @@ import 'package:viaja_segura_movil/presentation/widgets/organisms/trip_timeline.
 import 'package:viaja_segura_movil/presentation/widgets/templates/drawer_bottom_card_template.dart';
 import 'package:viaja_segura_movil/presentation/widgets/templates/profile_template.dart';
 
-class TripHistoryDetails extends StatefulWidget {
-  const TripHistoryDetails({super.key});
+class TripHistoryDetailsScreen extends StatefulWidget {
+  const TripHistoryDetailsScreen({super.key});
 
   @override
-  State<TripHistoryDetails> createState() => _TripHistoryDetailsState();
+  State<TripHistoryDetailsScreen> createState() {
+    return _TripHistoryDetailsScreenState();
+  }
 }
 
-class _TripHistoryDetailsState extends State<TripHistoryDetails> {
+class _TripHistoryDetailsScreenState extends State<TripHistoryDetailsScreen> {
   double? rating;
 
   @override
@@ -32,9 +34,7 @@ class _TripHistoryDetailsState extends State<TripHistoryDetails> {
           RatingCardInfo(
             rating: rating,
             onRatingChanged: (newRating) {
-              setState(() {
-                rating = newRating;
-              });
+              setState(() => rating = newRating);
             },
           ),
         ],

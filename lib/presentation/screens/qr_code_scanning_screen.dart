@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/go_back_button.dart';
 
 class QrCodeScanningScreen extends StatefulWidget {
@@ -19,26 +19,57 @@ class _QrCodeScanningScreenState extends State<QrCodeScanningScreen> {
   @override
   void reassemble() {
     super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller!.resumeCamera();
+    // Ensure controller is not null before pausing/resuming camera
+    if (controller != null) {
+      if (Platform.isAndroid) {
+        controller!.pauseCamera();
+      } else if (Platform.isIOS) {
+        controller!.resumeCamera();
+      }
     }
   }
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() => result = scanData);
+
+    controller.scannedDataStream.listen((scanData) async {
+      if (scanData.code != null && scanData.code!.isNotEmpty) {
+        await controller.pauseCamera();
+
+        final String scannedUrl = scanData.code!;
+        print("URL escaneada: $scannedUrl");
+
+        final Uri? uri = Uri.tryParse(scannedUrl);
+        if (uri != null && (uri.isScheme('http') || uri.isScheme('https'))) {
+          if (await canLaunchUrl(uri)) {
+            await launchUrl(uri, mode: LaunchMode.externalApplication);
+          } else {
+            _showSnackbar("No se puede abrir la URL");
+          }
+        } else {
+          _showSnackbar("El QR no contiene una URL válida");
+        }
+
+        await Future.delayed(const Duration(seconds: 3));
+        await controller.resumeCamera();
+      }
     });
   }
 
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
   void _toggleFlash() async {
-    if (controller != null) await controller!.toggleFlash();
+    if (controller != null) {
+      await controller!.toggleFlash();
+    }
   }
 
   void _flipCamera() async {
-    if (controller != null) await controller!.flipCamera();
+    if (controller != null) {
+      await controller!.flipCamera();
+    }
   }
 
   @override
@@ -58,10 +89,7 @@ class _QrCodeScanningScreenState extends State<QrCodeScanningScreen> {
           Container(
             color: theme.primaryColor.withOpacity(0.7),
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 48.0,
-                horizontal: 16.0,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 16.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

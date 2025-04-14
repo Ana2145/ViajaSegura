@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:viaja_segura_movil/core/constants/app_colors.dart';
+import 'package:viaja_segura_movil/data/cubits/ride_state/ride_cubit.dart';
 import 'package:viaja_segura_movil/data/repositories/auth_repository.dart';
+import 'package:viaja_segura_movil/data/repositories/ride_repository.dart';
 import 'package:viaja_segura_movil/presentation/screens/create_account_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/driver_info_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/driver_profile_screen.dart';
@@ -12,7 +14,7 @@ import 'package:viaja_segura_movil/presentation/screens/notifications_screen.dar
 import 'package:viaja_segura_movil/presentation/screens/recover_password_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/qr_code_scanning_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/splash_screen.dart';
-import 'package:viaja_segura_movil/presentation/screens/trip_history_details.dart';
+import 'package:viaja_segura_movil/presentation/screens/trip_history_details_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/trip_history_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/user_profile_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/welcome_screen.dart';
@@ -24,12 +26,18 @@ void main() {
     MultiRepositoryProvider(
       providers: [
         RepositoryProvider(create: (context) => AuthRepository()),
+        RepositoryProvider(create: (context) => RideRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => AuthCubit(
               authRepository: context.read<AuthRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => RideCubit(
+              rideRepository: context.read<RideRepository>(),
             ),
           ),
         ],
@@ -167,7 +175,7 @@ class MyApp extends StatelessWidget {
         '/notifications_screen': (context) => const NotificationsScreen(),
         '/trip_history_screen': (context) => const TripHistoryScreen(),
         '/qr_code_scanning_screen': (context) => const QrCodeScanningScreen(),
-        '/trip_history_details': (context) => const TripHistoryDetails(),
+        '/trip_history_details_screen': (context) => const TripHistoryDetailsScreen(),
       },
     );
   }

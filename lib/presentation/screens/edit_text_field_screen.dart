@@ -3,12 +3,12 @@ import 'package:viaja_segura_movil/presentation/widgets/atoms/custom_button.dart
 import 'package:viaja_segura_movil/presentation/widgets/molecules/custom_text_form_field.dart';
 import 'package:viaja_segura_movil/presentation/widgets/templates/profile_template.dart';
 
-class EditTextFieldPage extends StatefulWidget {
+class EditTextFieldScreen extends StatefulWidget {
   final String label;
   final TextEditingController controller;
   final TextInputType keyboardType;
 
-  const EditTextFieldPage({
+  const EditTextFieldScreen({
     super.key,
     required this.label,
     required this.controller,
@@ -16,10 +16,10 @@ class EditTextFieldPage extends StatefulWidget {
   });
 
   @override
-  State<EditTextFieldPage> createState() => _EditTextFieldPageState();
+  State<EditTextFieldScreen> createState() => _EditTextFieldScreenState();
 }
 
-class _EditTextFieldPageState extends State<EditTextFieldPage> {
+class _EditTextFieldScreenState extends State<EditTextFieldScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
