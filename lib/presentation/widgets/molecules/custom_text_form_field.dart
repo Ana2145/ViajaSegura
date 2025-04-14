@@ -4,6 +4,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final String label;
+  final bool obscureText;
   final bool readOnly;
   final Widget suffix;
   final FocusNode? focusNode;
@@ -14,6 +15,7 @@ class CustomTextFormField extends StatefulWidget {
     required this.controller,
     required this.keyboardType,
     required this.label,
+    this.obscureText = false,
     this.readOnly = false,
     this.suffix = const SizedBox.shrink(),
     this.focusNode,
@@ -48,6 +50,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         TextFormField(
           controller: widget.controller,
           keyboardType: widget.keyboardType,
+          obscureText: widget.obscureText,
           readOnly: widget.readOnly,
           decoration: InputDecoration(suffixIcon: widget.suffix),
           focusNode: widget.focusNode,

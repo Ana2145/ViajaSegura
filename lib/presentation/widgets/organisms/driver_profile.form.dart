@@ -8,6 +8,7 @@ import 'package:viaja_segura_movil/data/models/driver_model.dart';
 
 import 'package:viaja_segura_movil/presentation/widgets/molecules/change_user_photo.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/custom_text_form_field.dart';
+import 'package:viaja_segura_movil/presentation/widgets/molecules/edit_password_button.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/edit_user_info_button.dart';
 
 class DriverProfileForm extends StatefulWidget {
@@ -26,6 +27,8 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
       TextEditingController(text: '•••••••••');
 
   DriverModel? _driver;
+
+  bool _wasUpdated = false;
 
   @override
   void initState() {
@@ -57,15 +60,17 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
     final prefs = await SharedPreferences.getInstance();
     final id = prefs.getInt('id');
 
-    if (id == null) {
-      return;
-    }
+    if (id == null) return;
 
     final updatedData = {
       'name': _nameController.text,
       'lastName': _surnameController.text,
       'phone': _phoneController.text,
     };
+
+    setState(() {
+      _wasUpdated = true;
+    });
 
     context.read<DriverCubit>().updatedDriver(id: id, updatedData: updatedData);
   }
@@ -75,11 +80,14 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
     final theme = Theme.of(context);
     return BlocListener<DriverCubit, DriverState>(
       listener: (context, state) {
-        if (state is DriverLoaded) {
+        if (state is DriverLoaded && _wasUpdated) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
                 content: Text('Información actualizada exitosamente')),
           );
+          setState(() {
+            _wasUpdated = false;
+          });
         } else if (state is DriverError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error: ${state.message}')),
@@ -147,11 +155,7 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
                   controller: _passwordController,
                   keyboardType: TextInputType.text,
                   readOnly: true,
-                  suffix: EditUserInfoButton(
-                    label: 'Contraseña',
-                    controller: _passwordController,
-                    keyboardType: TextInputType.text,
-                  ),
+                  suffix: EditPasswordButton(email: _emailController.text),
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(
