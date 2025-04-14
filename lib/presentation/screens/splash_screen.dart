@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (mounted) {
         if (token != null && role != null) {
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushNamed(context, '/home_d');
         } else {
           Navigator.pushNamed(context, '/welcome_screen');
         }
