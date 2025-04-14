@@ -1,54 +1,80 @@
 class RideModel {
   final int id;
+  final PassengerModel passenger;
+  final DriverModel driver;
+  final String originLat;
+  final String originLng;
+  final String destinationLat;
+  final String destinationLng;
+  final double price;
   final String startedAt;
   final String endedAt;
-  final double originLat;
-  final double originLng;
-  final double destinationLat;
-  final double destinationLng;
-  final double price;
-  final Passenger passenger;
+  final double averageRating;
 
   RideModel({
     required this.id,
-    required this.startedAt,
-    required this.endedAt,
+    required this.passenger,
+    required this.driver,
     required this.originLat,
     required this.originLng,
     required this.destinationLat,
     required this.destinationLng,
     required this.price,
-    required this.passenger,
+    required this.startedAt,
+    required this.endedAt,
+    required this.averageRating,
   });
 
   factory RideModel.fromJson(Map<String, dynamic> json) {
     return RideModel(
       id: json['id'],
+      passenger: PassengerModel.fromJson(json['passenger']),
+      driver: DriverModel.fromJson(json['driver']),
+      originLat: json['originLat'].toString(),
+      originLng: json['originLng'].toString(),
+      destinationLat: json['destinationLat'].toString(),
+      destinationLng: json['destinationLng'].toString(),
+      price: json['price'].toDouble(),
       startedAt: json['startedAt'],
       endedAt: json['endedAt'],
-      originLat: json['originLat'],
-      originLng: json['originLng'],
-      destinationLat: json['destinationLat'],
-      destinationLng: json['destinationLng'],
-      price: (json['price'] as num).toDouble(),
-      passenger: Passenger.fromJson(json['passenger']),
+      averageRating: json['driver']['averageRating'].toDouble(),
     );
   }
 }
 
-class Passenger {
+class PassengerModel {
   final String name;
   final String lastName;
 
-  Passenger({
+  PassengerModel({
     required this.name,
     required this.lastName,
   });
 
-  factory Passenger.fromJson(Map<String, dynamic> json) {
-    return Passenger(
+  factory PassengerModel.fromJson(Map<String, dynamic> json) {
+    return PassengerModel(
       name: json['name'],
       lastName: json['lastName'],
+    );
+  }
+}
+
+class DriverModel {
+  final String name;
+  final String lastName;
+  final double averageRating;
+
+  DriverModel({
+    required this.name,
+    required this.lastName,
+    required this.averageRating,
+  });
+
+  factory DriverModel.fromJson(Map<String, dynamic> json) {
+    return DriverModel(
+      name: json['name'],
+      lastName: json['lastName'],
+      averageRating: json['averageRating'].toDouble(),
     );
   }
 }

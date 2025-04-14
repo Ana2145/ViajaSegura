@@ -23,43 +23,48 @@ class DriverRidesList extends StatelessWidget {
               return const Center(child: Text('No hay viajes disponibles.'));
             }
 
-            return ListView.separated(
-              itemCount: state.rides.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final ride = state.rides[index];
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Text(
-                            'Pasajera: ${ride.passenger?.name ?? 'Desconocida'}',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
+            return SingleChildScrollView(
+              child: Column(
+                children: state.rides.map((ride) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Text(
+                                'Pasajera: ${ride.passenger.name}',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text('🕓 Inicio: ${formatDate(ride.startedAt)}'),
+                            Text('🕓 Fin: ${formatDate(ride.endedAt)}'),
+                            const SizedBox(height: 8),
+                            Text(
+                                '📍 Origen: (${ride.originLat}, ${ride.originLng})'),
+                            Text(
+                                '📍 Destino: (${ride.destinationLat}, ${ride.destinationLng})'),
+                            const SizedBox(height: 8),
+                            Text(
+                                '💰 Precio: \$${ride.price.toStringAsFixed(2)}'),
+                            const SizedBox(height: 8),
+                            Text(
+                                '⭐ Rating promedio: ${ride.driver.averageRating}'),
+                          ],
                         ),
-                        const SizedBox(height: 8),
-                        Text('🕓 Inicio: ${formatDate(ride.startedAt ?? '')}'),
-                        Text('🕓 Fin: ${formatDate(ride.endedAt ?? '')}'),
-                        const SizedBox(height: 8),
-                        Text(
-                            '📍 Origen: (${ride.originLat}, ${ride.originLng})'),
-                        Text(
-                            '📍 Destino: (${ride.destinationLat}, ${ride.destinationLng})'),
-                        const SizedBox(height: 8),
-                        Text(
-                            '💰 Precio: \$${ride.price?.toStringAsFixed(2) ?? '0.00'}'),
-                      ],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                }).toList(),
+              ),
             );
           } else if (state is RidesError) {
             return Center(child: Text(state.message));

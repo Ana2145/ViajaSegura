@@ -7,7 +7,7 @@ class DioClient {
   static Dio get instance {
     if (_dio == null) {
       _dio = Dio(BaseOptions(
-        baseUrl: 'http://192.168.0.121:8080/api',
+        baseUrl: 'http://192.168.1.72:8080/api',
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
       ));

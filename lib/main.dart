@@ -13,6 +13,7 @@ import 'package:viaja_segura_movil/presentation/screens/main_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/notifications_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/recover_password_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/qr_code_scanning_screen.dart';
+import 'package:viaja_segura_movil/presentation/screens/ride_details_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/splash_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/trip_history_details.dart';
 import 'package:viaja_segura_movil/presentation/screens/trip_history_screen.dart';
@@ -162,6 +163,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const MainScreen(),
         '/home_d': (context) => const DriverMainScreen(),
         '/driver_trip_history': (context) => const DriverRidesScreen(),
+        '/driver_ratings': (context) => const RideDetailsScreen(),
         '/login_screen': (context) => const LoginScreen(),
         '/recover_password': (context) => const RecoverPasswordScreen(),
         '/create_account': (context) => const CreateAccountScreen(),
