@@ -46,87 +46,121 @@ class RideDetailsScreen extends StatelessWidget {
                         child: Text('No hay viajes disponibles.'));
                   }
 
-                  return ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: state.rides.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final ride = state.rides[index];
-                        final driver = ride.driver;
+                  final averageRating =
+                      state.rides.first.driver?.averageRating ?? 0.0;
 
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Promedio de calificaciones',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Center(
-                                  child: Text(
-                                    'Promedio de Calificaciones: ${driver?.averageRating?.toStringAsFixed(1) ?? 'No disponible'}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Center(
-                                  child: Text(
-                                    getMotivationalMessage(
-                                        driver?.averageRating ?? 0),
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                                const Divider(thickness: 1.5),
-                                const SizedBox(height: 12),
+                                ...List.generate(5, (index) {
+                                  return Icon(
+                                    index < averageRating.round()
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    color: Colors.amber,
+                                    size: 36,
+                                  );
+                                }),
+                                const SizedBox(width: 10),
                                 Text(
-                                  'Desglose de calificaciones:',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Calificación:',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      '${driver?.averageRating?.toStringAsFixed(1) ?? 'N/A'}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      'Fecha del viaje:',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(formatDate(ride.endedAt ?? '')),
-                                  ],
+                                  '(${averageRating.toStringAsFixed(1)})',
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 30),
+                            Text(
+                              getMotivationalMessage(averageRating),
+                              style: Theme.of(context).textTheme.bodyLarge,
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 15),
+                            const Divider(
+                                thickness: 1.5, color: Color(0xFF773357)),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Desglose de calificaciones:',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                      ...state.rides.map((ride) {
+                        final rating = ride.driver?.averageRating ?? 0.0;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            elevation: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    formatDate(ride.endedAt ?? ''),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      ...List.generate(5, (index) {
+                                        return Icon(
+                                          index < rating.round()
+                                              ? Icons.star
+                                              : Icons.star_border,
+                                          color: Colors.amber,
+                                          size: 20,
+                                        );
+                                      }),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        '(${rating.toStringAsFixed(1)})',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         );
-                      });
+                      }).toList(),
+                    ],
+                  );
                 } else if (state is RidesError) {
                   return Center(child: Text(state.message));
                 }
