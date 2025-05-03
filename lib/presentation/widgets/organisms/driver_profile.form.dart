@@ -9,7 +9,7 @@ import 'package:viaja_segura_movil/data/models/driver_model.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/change_user_photo.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/custom_text_form_field.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/edit_password_button.dart';
-import 'package:viaja_segura_movil/presentation/widgets/organisms/edit_user_info_button.dart';
+//import 'package:viaja_segura_movil/presentation/widgets/organisms/edit_user_info_button.dart';
 
 class DriverProfileForm extends StatefulWidget {
   const DriverProfileForm({super.key});
@@ -27,8 +27,6 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
       TextEditingController(text: '•••••••••');
 
   DriverModel? _driver;
-
-  bool _wasUpdated = false;
 
   @override
   void initState() {
@@ -56,39 +54,12 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
     }
   }
 
-  Future<void> _saveDriverInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    final id = prefs.getInt('id');
-
-    if (id == null) return;
-
-    final updatedData = {
-      'name': _nameController.text,
-      'lastName': _surnameController.text,
-      'phone': _phoneController.text,
-    };
-
-    setState(() {
-      _wasUpdated = true;
-    });
-
-    context.read<DriverCubit>().updatedDriver(id: id, updatedData: updatedData);
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return BlocListener<DriverCubit, DriverState>(
       listener: (context, state) {
-        if (state is DriverLoaded && _wasUpdated) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Información actualizada exitosamente')),
-          );
-          setState(() {
-            _wasUpdated = false;
-          });
-        } else if (state is DriverError) {
+        if (state is DriverError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error: ${state.message}')),
           );
@@ -96,7 +67,10 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
       },
       child: Column(
         children: [
-          const ChangeUserPhoto(),
+          _driver == null
+              ? const SizedBox.shrink()
+              : ChangeUserPhoto(
+                  name: _driver!.name, lastName: _driver!.lastname),
           const SizedBox(height: 16.0),
           Container(
             decoration: BoxDecoration(
@@ -119,11 +93,6 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
                   controller: _nameController,
                   keyboardType: TextInputType.text,
                   readOnly: true,
-                  suffix: EditUserInfoButton(
-                    label: 'Nombre',
-                    controller: _nameController,
-                    keyboardType: TextInputType.text,
-                  ),
                 ),
                 const SizedBox(height: 16.0),
                 CustomTextFormField(
@@ -131,11 +100,6 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
                   controller: _surnameController,
                   keyboardType: TextInputType.text,
                   readOnly: true,
-                  suffix: EditUserInfoButton(
-                    label: 'Apellido(s)',
-                    controller: _surnameController,
-                    keyboardType: TextInputType.text,
-                  ),
                 ),
                 const SizedBox(height: 16.0),
                 CustomTextFormField(
@@ -143,11 +107,6 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
                   controller: _phoneController,
                   keyboardType: TextInputType.number,
                   readOnly: true,
-                  suffix: EditUserInfoButton(
-                    label: 'Número de teléfono',
-                    controller: _phoneController,
-                    keyboardType: TextInputType.number,
-                  ),
                 ),
                 const SizedBox(height: 16.0),
                 CustomTextFormField(
@@ -156,17 +115,6 @@ class _DriverProfileFormState extends State<DriverProfileForm> {
                   keyboardType: TextInputType.text,
                   readOnly: true,
                   suffix: EditPasswordButton(email: _emailController.text),
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: _saveDriverInfo,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: const Text('Guardar cambios'),
                 ),
               ],
             ),

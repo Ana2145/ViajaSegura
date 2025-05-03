@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:viaja_segura_movil/data/models/auth_model.dart';
+import 'package:viaja_segura_movil/data/repositories/auth_response.dart';
 
 abstract class AuthState extends Equatable {
   @override
@@ -11,12 +11,12 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class AuthAuthenticated extends AuthState {
-  final AuthModel auth;
+  final AuthResponse authResponse;
 
-  AuthAuthenticated(this.auth);
+  AuthAuthenticated(this.authResponse);
 
   @override
-  List<Object?> get props => [auth];
+  List<Object?> get props => [authResponse];
 }
 
 class AuthError extends AuthState {

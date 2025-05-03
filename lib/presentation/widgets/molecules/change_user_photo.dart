@@ -1,60 +1,61 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
-class ChangeUserPhoto extends StatefulWidget {
-  const ChangeUserPhoto({super.key});
+class ChangeUserPhoto extends StatelessWidget {
+  final String name;
+  final String lastName;
 
-  @override
-  State<ChangeUserPhoto> createState() => _ChangeUserPhotoState();
-}
+  const ChangeUserPhoto({
+    super.key,
+    required this.name,
+    required this.lastName,
+  });
 
-class _ChangeUserPhotoState extends State<ChangeUserPhoto> {
-  XFile? _image;
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() => _image = pickedFile);
-    }
+  String getInitials() {
+    final firstInitial = name.isNotEmpty ? name[0] : '';
+    final lastInitial = lastName.isNotEmpty ? lastName[0] : '';
+    return '$firstInitial$lastInitial'.toUpperCase();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            // Avatar
-            CircleAvatar(
-              radius: 72,
-              backgroundImage: _image == null
-                  ? const AssetImage('assets/images/default_avatar.png')
-                  : FileImage(File(_image!.path)) as ImageProvider,
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: _pickImage,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: theme.focusColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: theme.canvasColor, width: 2),
-                  ),
-                  child: Icon(Icons.edit, color: theme.canvasColor, size: 20),
-                ),
-              ),
-            ),
+
+    return Container(
+      width: 160,
+      height: 160,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          colors: [
+            theme.primaryColor.withOpacity(0.9),
+            theme.primaryColor.withOpacity(0.7),
           ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-      ],
+        boxShadow: [
+          BoxShadow(
+            color: theme.primaryColor.withOpacity(0.4),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+        border: Border.all(
+          color: theme.colorScheme.tertiary,
+          width: 4,
+        ),
+      ),
+      child: Center(
+        child: Text(
+          getInitials(),
+          style: theme.textTheme.headlineLarge?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            fontSize: 48,
+            letterSpacing: 2,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -6,12 +6,15 @@ import 'package:viaja_segura_movil/presentation/widgets/organisms/driver_rides_l
 import 'package:viaja_segura_movil/presentation/widgets/templates/profile_template.dart';
 
 class DriverRidesScreen extends StatelessWidget {
-  const DriverRidesScreen({super.key});
+  final int driverId;
+
+  const DriverRidesScreen({super.key, required this.driverId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => RidesCubit(RideRepository())..fetchRides(),
+      create: (_) =>
+          RidesCubit(RideRepository())..fetchRidesByDriverId(driverId),
       child: const ProfileTemplate(
         title: 'Historial de viajes',
         child: DriverRidesList(),

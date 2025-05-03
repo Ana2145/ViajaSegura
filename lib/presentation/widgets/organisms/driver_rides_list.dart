@@ -26,8 +26,19 @@ class DriverRidesList extends StatelessWidget {
                 child: Text('No se han realizado viajes actualmente.'));
           }
 
+          final completeRides = state.rides
+              .where((ride) =>
+                  ride.endedAt != null && ride.endedAt.toString().isNotEmpty)
+              .toList();
+
+          if (completeRides.isEmpty) {
+            return const Center(
+              child: Text('No hay viajes finalizados para mostrar.'),
+            );
+          }
+
           return Column(
-            children: state.rides.map((ride) {
+            children: completeRides.map((ride) {
               return _RideItem(
                 ride: ride,
                 theme: theme,

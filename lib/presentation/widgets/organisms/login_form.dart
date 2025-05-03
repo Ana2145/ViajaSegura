@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viaja_segura_movil/data/cubits/auth/auth_cubit.dart';
 import 'package:viaja_segura_movil/data/cubits/auth/auth_state.dart';
 import 'package:viaja_segura_movil/data/models/auth_model.dart';
@@ -23,8 +24,13 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is AuthAuthenticated) {
+          final driverId = state.authResponse.id;
+          final token = state.authResponse.token;
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setInt('driverId', driverId);
+          await prefs.setString('token', token);
           Navigator.pushNamed(context, "/");
         } else if (state is AuthError) {
           CustomSnackBar.show(

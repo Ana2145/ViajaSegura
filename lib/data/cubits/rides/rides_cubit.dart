@@ -9,14 +9,14 @@ class RidesCubit extends Cubit<RidesState> {
 
   RidesCubit(this.rideRepository) : super(RidesInitial());
 
-  Future<void> fetchRides() async {
+  Future<void> fetchRidesByDriverId(int driverId) async {
     try {
       emit(RidesLoading());
-      final rides = await rideRepository.getAllRides();
+      final rides = await rideRepository.getRidesByDriverId(driverId);
       emit(RidesLoaded(rides));
     } catch (e) {
       emit(RidesError(
-          'Ocurrió un error al obtener los viajes: ${e.toString()}'));
+          'Ocurrió un error al obtener los viajes del conductor: ${e.toString()}'));
     }
   }
 }

@@ -17,7 +17,6 @@ import 'package:viaja_segura_movil/presentation/screens/ride_details_screen.dart
 import 'package:viaja_segura_movil/presentation/screens/splash_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/trip_history_details.dart';
 import 'package:viaja_segura_movil/presentation/screens/trip_history_screen.dart';
-import 'package:viaja_segura_movil/presentation/screens/user_profile_screen.dart';
 import 'package:viaja_segura_movil/presentation/screens/welcome_screen.dart';
 
 import 'data/cubits/auth/auth_cubit.dart';
@@ -162,7 +161,6 @@ class MyApp extends StatelessWidget {
         '/welcome_screen': (context) => const WelcomeScreen(),
         '/home': (context) => const MainScreen(),
         '/home_d': (context) => const DriverMainScreen(),
-        '/driver_trip_history': (context) => const DriverRidesScreen(),
         '/driver_ratings': (context) => const RideDetailsScreen(),
         '/login_screen': (context) => const LoginScreen(),
         '/recover_password': (context) => const RecoverPasswordScreen(),
@@ -174,6 +172,20 @@ class MyApp extends StatelessWidget {
         '/trip_history_screen': (context) => const TripHistoryScreen(),
         '/qr_code_scanning_screen': (context) => const QrCodeScanningScreen(),
         '/trip_history_details': (context) => const TripHistoryDetails(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/driver_trip_history') {
+          final driverId = settings.arguments as int;
+          return MaterialPageRoute(
+            builder: (context) => DriverRidesScreen(driverId: driverId),
+          );
+        }
+
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(child: Text('Ruta no encontrada')),
+          ),
+        );
       },
     );
   }

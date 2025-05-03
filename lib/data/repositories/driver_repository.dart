@@ -30,4 +30,25 @@ class DriverRepository {
           'Error al actualizar la información del conductor: ${e.message}');
     }
   }
+
+  Future<bool> getAvailability(int driverId) async {
+    try {
+      final response = await dio.get('/users/drivers/$driverId');
+      return response.data['available'] as bool;
+    } on DioException catch (e) {
+      throw Exception('Error al obtener la disponibilidad: ${e.message}');
+    }
+  }
+
+  Future<bool> updateAvailability(int driverId, bool available) async {
+    try {
+      final response = await dio.put(
+        '/users/drivers/$driverId/available',
+        queryParameters: {'available': available},
+      );
+      return response.data['available'] as bool;
+    } on DioException catch (e) {
+      throw Exception('Error al actualizar la disponibilidad: ${e.message}');
+    }
+  }
 }

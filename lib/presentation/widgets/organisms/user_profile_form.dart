@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:viaja_segura_movil/presentation/widgets/molecules/change_user_photo.dart';
 import 'package:viaja_segura_movil/presentation/widgets/molecules/custom_text_form_field.dart';
 import 'package:viaja_segura_movil/presentation/widgets/organisms/edit_user_info_button.dart';
 
@@ -31,7 +30,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
     final theme = Theme.of(context);
     return Column(
       children: [
-        const ChangeUserPhoto(),
+        //const ChangeUserPhoto(name: String.fromEnvironment(name),),
         const SizedBox(height: 16.0),
         Container(
           decoration: BoxDecoration(

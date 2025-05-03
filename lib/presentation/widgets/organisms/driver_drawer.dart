@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:viaja_segura_movil/data/cubits/auth/auth_cubit.dart';
+import 'package:viaja_segura_movil/data/cubits/auth/auth_state.dart';
 import 'package:viaja_segura_movil/presentation/widgets/atoms/logo.dart';
 
 class DriverDrawer extends StatefulWidget {
@@ -15,7 +16,21 @@ class _DriverDrawerState extends State<DriverDrawer> {
     return ListTile(
       leading: icon,
       title: Text(title),
-      onTap: () => Navigator.of(context).pushNamed(route),
+      onTap: () {
+        final state = context.read<AuthCubit>().state;
+        if (state is AuthAuthenticated) {
+          final driverId = state.authResponse.id;
+          Navigator.of(context).pushNamed(
+            route,
+            arguments: driverId,
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('No se ha autenticado ningún conductor')),
+          );
+        }
+      },
     );
   }
 

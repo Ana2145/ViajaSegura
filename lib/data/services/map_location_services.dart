@@ -31,17 +31,25 @@ class MapLocationServices {
 
   Future<String> getAddressFromLatLng(double lat, double lng) async {
     final url = Uri.parse(
-        'https://nominatim.openstreetmap.org/reverse?format=json&lat=$lat&lon=$lng&zoom=18&addressdetails=1');
+      'https://nominatim.openstreetmap.org/reverse?format=json&lat=$lat&lon=$lng&zoom=18&addressdetails=1',
+    );
 
     try {
-      final response = await http.get(url);
+      final response = await http.get(
+        url,
+        headers: {
+          'User-Agent': 'viaja_segura_app/1.0 (contacto@tuapp.com)',
+        },
+      );
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return data['display_name'] as String? ?? "Ubicación actual";
+        return data['display_name'] as String? ?? "Ubicación no encontrada";
+      } else {
+        return "Error al obtener dirección";
       }
-      return "Ubicación actual";
     } catch (e) {
-      return "Ubicación actual";
+      return "Error al obtener dirección";
     }
   }
 }
